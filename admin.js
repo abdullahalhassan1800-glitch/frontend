@@ -42,3 +42,5 @@ function closeDrawer(){ document.getElementById('productDrawer').classList.remov
 document.getElementById('btnHamburger') && document.getElementById('btnHamburger').addEventListener('click', ()=>{ document.getElementById('sidebar').classList.toggle('show'); document.getElementById('sidebarOverlay').classList.toggle('show'); });
 document.getElementById('sidebarOverlay') && document.getElementById('sidebarOverlay').addEventListener('click', ()=>{ document.getElementById('sidebar').classList.remove('show'); document.getElementById('sidebarOverlay').classList.remove('show'); });
 function removeThumb(el){ if(el && el.parentElement){ el.parentElement.remove(); } }
+
+if(document.getElementById(" addBtn\)){document.getElementById(ddBtn\).addEventListener(\click\,openAddDrawer);}

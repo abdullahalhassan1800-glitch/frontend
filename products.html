@@ -1,1 +1,351 @@
-﻿<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0"><title>Products - MyStore Admin Panel</title><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"><link rel="stylesheet" href="admin.css"></head><body><div class="main-wrapper"><header class="top-header"><div class="header-left"><button class="btn-hamburger" id="btnHamburger"><i class="bi bi-list"></i></button><div class="search-wrapper"><i class="bi bi-search"></i><input type="text" class="search-input" placeholder="Search products, orders, customers..."></div></div><div class="header-right"><button class="header-icon-btn"><i class="bi bi-bell"></i><span class="notification-badge">3</span></button><div class="user-menu"><div class="user-avatar">AH</div></div></div></header><main class="main-content"><div class="stats-grid"><div class="stat-card"><div class="stat-icon blue"><i class="bi bi-box-seam"></i></div><div class="stat-title">Total Products</div><div class="stat-value" id="statTotal">128</div></div><div class="stat-card"><div class="stat-icon green"><i class="bi bi-check-circle"></i></div><div class="stat-title">Active Products</div><div class="stat-value" id="statActive">110</div></div><div class="stat-card"><div class="stat-icon orange"><i class="bi bi-x-circle"></i></div><div class="stat-title">Out of Stock</div><div class="stat-value" id="statOos">12</div></div><div class="stat-card"><div class="stat-icon purple"><i class="bi bi-grid"></i></div><div class="stat-title">Categories</div><div class="stat-value" id="statCats">18</div></div></div><div class="products-section"><div class="section-header"><div><div class="section-title">Products</div><div class="section-subtitle">Manage your products, add new products or edit existing ones.</div></div><button class="btn-primary" id="addBtn"><i class="bi bi-plus"></i> Add Product</button></div><div class="filters-bar"><div class="search-wrapper" style="width:320px"><i class="bi bi-search"></i><input type="text" id="productSearch" class="search-input" placeholder="Search products..."></div><select class="form-select" id="categoryFilter" style="width:180px"><option value="">All Categories</option><option>Health</option><option>Electronics</option><option>Footwear</option><option>Bags</option></select><select class="form-select" id="statusFilter" style="width:180px"><option value="">All Status</option><option>Active</option><option>Inactive</option></select><button class="btn-ghost" id="resetBtn">Reset</button></div><div class="table-responsive"><table class="table"><thead><tr><th>#</th><th>Image</th><th>Product Name</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Featured</th><th>Actions</th></tr></thead><tbody id="productTableBody"></tbody></table></div><div class="pagination-wrapper"><div class="page-info" id="pageInfo"></div><nav><ul class="pagination" id="pagination"></ul></nav></div></div></main></div><div class="overlay" id="drawerOverlay"></div><div class="drawer" id="productDrawer"><div class="drawer-header"><h5 class="drawer-title" id="drawerTitle">Add New Product</h5><button class="btn-close" id="closeDrawerBtn"></button></div><div class="drawer-body"><form id="productForm"><div class="mb-3"><label class="form-label">Product Name *</label><input type="text" class="form-control" id="productName"></div></form></div><div class="drawer-footer"><button class="btn-ghost" id="cancelBtn">Cancel</button><button class="btn-primary" id="saveBtn">Save Product</button></div></div><div class="toast-container" id="toastContainer"></div><script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script><script src="admin.js"></script></body></html>
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - MyStore Admin Panel</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-header">
+            <div class="logo-icon"><i class="bi bi-bag-fill"></i></div>
+            <div>
+                <div class="logo-text">MyStore</div>
+                <div class="logo-sub">Admin Panel</div>
+            </div>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-section">MAIN</div>
+            <a href="dashboard.html" class="nav-item"><i class="bi bi-speedometer2"></i><span>Dashboard</span></a>
+
+            <div class="nav-section">PRODUCTS</div>
+            <a href="products.html" class="nav-item active"><i class="bi bi-box-seam"></i><span>Products</span></a>
+            <a href="#" class="nav-item" data-action="add"><i class="bi bi-plus-circle"></i><span>Add Product</span></a>
+            <a href="products-collections.html" class="nav-item"><i class="bi bi-layers"></i><span>Collections</span></a>
+            <a href="products-inventory.html" class="nav-item"><i class="bi bi-clipboard-data"></i><span>Inventory</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-grid"></i><span>Categories</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-tags"></i><span>Brands</span></a>
+            <a href="products-transfers.html" class="nav-item"><i class="bi bi-arrow-left-right"></i><span>Transfers</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-star"></i><span>Reviews</span></a>
+
+            <div class="nav-section">SALES</div>
+            <a href="products-purchase-orders.html" class="nav-item"><i class="bi bi-bag-check"></i><span>Purchase Orders</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-cart3"></i><span>Orders</span></a>
+            <a href="products-gift-cards.html" class="nav-item"><i class="bi bi-gift"></i><span>Gift Cards</span></a>
+
+            <div class="nav-section">CUSTOMERS</div>
+            <a href="#" class="nav-item"><i class="bi bi-people"></i><span>Customers</span></a>
+
+            <div class="nav-section">MEDIA & MARKETING</div>
+            <a href="#" class="nav-item"><i class="bi bi-folder2-open"></i><span>Media Library</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-image"></i><span>Banners</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-percent"></i><span>Coupons</span></a>
+
+            <div class="nav-section">SETTINGS</div>
+            <a href="#" class="nav-item"><i class="bi bi-gear"></i><span>General Settings</span></a>
+            <a href="#" class="nav-item"><i class="bi bi-person-gear"></i><span>Users & Roles</span></a>
+            <a href="auth/login.html" class="nav-item"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
+        </nav>
+    </aside>
+
+    <div class="overlay" id="sidebarOverlay"></div>
+
+    <div class="main-wrapper">
+        <header class="top-header">
+            <div class="header-left">
+                <button class="btn-hamburger" id="btnHamburger"><i class="bi bi-list"></i></button>
+                <div class="search-wrapper">
+                    <i class="bi bi-search"></i>
+                    <input type="text" class="search-input" id="globalSearch" placeholder="Search products, orders, customers...">
+                </div>
+            </div>
+            <div class="header-right">
+                <button class="header-icon-btn" id="themeBtn" title="Toggle theme"><i class="bi bi-sun"></i></button>
+                <button class="header-icon-btn" id="notifBtn"><i class="bi bi-bell"></i><span class="notification-badge">3</span></button>
+                <div class="user-menu">
+                    <div class="user-avatar">AH</div>
+                    <div class="user-info">
+                        <div class="user-name">Admin</div>
+                        <div class="user-role">Administrator</div>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="main-content">
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon blue"><i class="bi bi-box-seam"></i></div>
+                    <div class="stat-title">Total Products</div>
+                    <div class="stat-value" id="statTotal">0</div>
+                    <div class="stat-change"><i class="bi bi-arrow-up"></i> Live from store</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon green"><i class="bi bi-check-circle"></i></div>
+                    <div class="stat-title">Active Products</div>
+                    <div class="stat-value" id="statActive">0</div>
+                    <div class="stat-change"><i class="bi bi-arrow-up"></i> Visible to customers</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon orange"><i class="bi bi-x-circle"></i></div>
+                    <div class="stat-title">Out of Stock</div>
+                    <div class="stat-value" id="statOos">0</div>
+                    <div class="stat-change"><i class="bi bi-arrow-down"></i> Needs restock</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon purple"><i class="bi bi-grid"></i></div>
+                    <div class="stat-title">Categories</div>
+                    <div class="stat-value" id="statCats">0</div>
+                    <div class="stat-change"><i class="bi bi-grid"></i> Across store</div>
+                </div>
+            </div>
+
+            <section class="products-section">
+                <div class="section-header">
+                    <div>
+                        <div class="section-title">Products</div>
+                        <div class="section-subtitle">Manage your products, add new products or edit existing ones.</div>
+                    </div>
+                    <button class="btn-primary" id="addBtn"><i class="bi bi-plus"></i> Add Product</button>
+                </div>
+
+                <div class="filters-bar">
+                    <div class="search-wrapper" style="width:320px">
+                        <i class="bi bi-search"></i>
+                        <input type="text" id="productSearch" class="search-input" placeholder="Search products...">
+                    </div>
+                    <select class="form-select" id="categoryFilter" style="width:190px"></select>
+                    <select class="form-select" id="statusFilter" style="width:170px">
+                        <option value="">All Status</option>
+                        <option value="Active">Active</option>
+                        <option value="Inactive">Inactive</option>
+                    </select>
+                    <button class="btn-ghost" id="resetBtn">Reset</button>
+                    <button class="btn-ghost" id="exportBtn"><i class="bi bi-download"></i> Export</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th><input type="checkbox" class="form-check-input" id="selectAll"></th>
+                                <th>#</th>
+                                <th>Image</th>
+                                <th>Product Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th>Featured</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productTableBody"></tbody>
+                    </table>
+                </div>
+
+                <div class="pagination-wrapper">
+                    <div class="page-info" id="pageInfo"></div>
+                    <ul class="pagination" id="pagination"></ul>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <div class="overlay" id="drawerOverlay"></div>
+
+    <aside class="drawer" id="productDrawer" aria-hidden="true">
+        <div class="drawer-header">
+            <h5 class="drawer-title" id="drawerTitle">Add New Product</h5>
+            <button class="btn-close" id="closeDrawerBtn" aria-label="Close"><i class="bi bi-x-lg"></i></button>
+        </div>
+
+        <div class="drawer-body">
+            <div class="drawer-tabs" role="tablist">
+                <button class="drawer-tab active" data-tab="basic">Basic Information</button>
+                <button class="drawer-tab" data-tab="images">Images</button>
+                <button class="drawer-tab" data-tab="seo">SEO</button>
+                <button class="drawer-tab" data-tab="advanced">Advanced</button>
+            </div>
+
+            <form id="productForm" novalidate>
+                <input type="hidden" id="productId">
+
+                <div class="tab-pane active" data-pane="basic">
+                    <div class="mb-3">
+                        <label class="form-label" for="productName">Product Name <span class="required">*</span></label>
+                        <input type="text" class="form-control" id="productName" placeholder="e.g. Wireless Headphones">
+                        <div class="invalid-feedback" id="errName">Product name is required.</div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label" for="productCategory">Category <span class="required">*</span></label>
+                            <select class="form-select" id="productCategory">
+                                <option>Health</option>
+                                <option>Electronics</option>
+                                <option>Footwear</option>
+                                <option>Bags</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="productBrand">Brand</label>
+                            <select class="form-select" id="productBrand">
+                                <option>Taiva Naturals</option>
+                                <option>SoundMax</option>
+                                <option>FitPro</option>
+                                <option>Traveller</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label" for="productSku">SKU</label>
+                            <input type="text" class="form-control" id="productSku" placeholder="Auto-generated">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="productUnit">Unit</label>
+                            <select class="form-select" id="productUnit">
+                                <option>Piece</option>
+                                <option>Pack</option>
+                                <option>Box</option>
+                                <option>Kg</option>
+                                <option>Litre</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label" for="productPrice">Price (&#8377;) <span class="required">*</span></label>
+                            <input type="number" min="0" step="1" class="form-control" id="productPrice" placeholder="999">
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="productSalePrice">Sale Price (&#8377;)</label>
+                            <input type="number" min="0" step="1" class="form-control" id="productSalePrice" placeholder="Optional">
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="productStock">Stock Quantity</label>
+                        <input type="number" min="0" step="1" class="form-control" id="productStock" placeholder="0">
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="productShortDesc">Short Description <span class="required">*</span></label>
+                        <textarea class="form-control" id="productShortDesc" rows="3" placeholder="One or two line summary"></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label class="form-label" for="productFullDesc">Full Description</label>
+                        <textarea class="form-control" id="productFullDesc" rows="4" placeholder="Detailed description"></textarea>
+                    </div>
+                </div>
+
+                <div class="tab-pane" data-pane="images">
+                    <div class="mb-3">
+                        <label class="form-label">Product Images <span class="required">*</span></label>
+                        <div class="upload-area" id="uploadArea" role="button" tabindex="0">
+                            <i class="bi bi-cloud-arrow-up upload-icon"></i>
+                            <div class="upload-text">Click to upload images</div>
+                            <div class="upload-subtext">PNG, JPG or WebP &middot; Max 5MB each</div>
+                        </div>
+                        <input type="file" id="imageInput" accept="image/png,image/jpeg,image/webp" multiple hidden>
+                        <div class="image-preview-grid" id="imagePreviewGrid"></div>
+                    </div>
+                </div>
+
+                <div class="tab-pane" data-pane="seo">
+                    <div class="mb-3">
+                        <label class="form-label" for="productMetaTitle">Meta Title</label>
+                        <input type="text" class="form-control" id="productMetaTitle" placeholder="SEO title">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="productMetaDesc">Meta Description</label>
+                        <textarea class="form-control" id="productMetaDesc" rows="3" placeholder="SEO description"></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="productTags">Tags</label>
+                        <input type="text" class="form-control" id="productTags" placeholder="health, ayurvedic, natural">
+                    </div>
+                </div>
+
+                <div class="tab-pane" data-pane="advanced">
+                    <div class="row g-3 mb-3">
+                        <div class="col-6">
+                            <label class="form-label" for="productStatus">Status</label>
+                            <select class="form-select" id="productStatus">
+                                <option>Active</option>
+                                <option>Inactive</option>
+                            </select>
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label" for="productWeight">Weight (g)</label>
+                            <input type="number" min="0" class="form-control" id="productWeight" placeholder="0">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label" for="productMetaKey">Meta Keyword</label>
+                        <input type="text" class="form-control" id="productMetaKey" placeholder="keyword">
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="productFeatured">
+                            <label class="form-check-label" for="productFeatured">Featured product</label>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <div class="drawer-footer">
+            <button class="btn-ghost" id="cancelBtn">Cancel</button>
+            <button class="btn-primary" id="saveBtn">Save Product</button>
+        </div>
+    </aside>
+
+    <div class="toast-container" id="toastContainer"></div>
+
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Product Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="viewModalBody"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn-primary" id="viewEditBtn">Edit Product</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmTitle">Confirm</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="confirmMessage"></div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-danger" id="confirmBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="admin.js"></script>
+</body>
+</html>

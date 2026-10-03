@@ -43,4 +43,4 @@ document.getElementById('btnHamburger') && document.getElementById('btnHamburger
 document.getElementById('sidebarOverlay') && document.getElementById('sidebarOverlay').addEventListener('click', ()=>{ document.getElementById('sidebar').classList.remove('show'); document.getElementById('sidebarOverlay').classList.remove('show'); });
 function removeThumb(el){ if(el && el.parentElement){ el.parentElement.remove(); } }
 
-if(document.getElementById(" addBtn\)){document.getElementById(ddBtn\).addEventListener(\click\,openAddDrawer);}
+if(document.getElementById(" addBtn\)){document.getElementById(ddBtn\).addEventListener(\click\,openAddDrawer);}

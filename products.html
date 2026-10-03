@@ -52,6 +52,14 @@
             <a href="#" class="nav-item"><i class="bi bi-person-gear"></i><span>Users & Roles</span></a>
             <a href="auth/login.html" class="nav-item"><i class="bi bi-box-arrow-right"></i><span>Logout</span></a>
         </nav>
+
+        <div class="sidebar-footer">
+            <div class="upgrade-card">
+                <i class="bi bi-rocket-takeoff upgrade-icon"></i>
+                <div class="upgrade-title">Upgrade to Pro</div>
+                <button class="upgrade-btn" id="upgradeBtn">View Plans</button>
+            </div>
+        </div>
     </aside>
 
     <div class="overlay" id="sidebarOverlay"></div>
@@ -60,21 +68,33 @@
         <header class="top-header">
             <div class="header-left">
                 <button class="btn-hamburger" id="btnHamburger"><i class="bi bi-list"></i></button>
-                <div class="search-wrapper">
+                <div class="search-wrapper header-search">
                     <i class="bi bi-search"></i>
                     <input type="text" class="search-input" id="globalSearch" placeholder="Search products, orders, customers...">
                 </div>
             </div>
             <div class="header-right">
-                <button class="header-icon-btn" id="themeBtn" title="Toggle theme"><i class="bi bi-sun"></i></button>
-                <button class="header-icon-btn" id="notifBtn"><i class="bi bi-bell"></i><span class="notification-badge">3</span></button>
-                <div class="user-menu">
-                    <div class="user-avatar">AH</div>
-                    <div class="user-info">
-                        <div class="user-name">Admin</div>
-                        <div class="user-role">Administrator</div>
+                <button class="header-icon-btn" id="themeBtn" title="Toggle theme"><i class="bi bi-sun" id="themeIcon"></i></button>
+
+                <div class="notif-wrap">
+                    <button class="header-icon-btn" id="notifBtn" aria-label="Notifications">
+                        <i class="bi bi-bell"></i><span class="notification-badge" id="notifBadge">3</span>
+                    </button>
+                    <div class="notif-panel" id="notifPanel">
+                        <div class="notif-panel-head">Notifications</div>
+                        <div class="notif-item"><i class="bi bi-box-seam"></i><div><div>New product awaiting review</div><div class="notif-when">2 minutes ago</div></div></div>
+                        <div class="notif-item"><i class="bi bi-exclamation-triangle"></i><div><div>3 items are low in stock</div><div class="notif-when">1 hour ago</div></div></div>
+                        <div class="notif-item"><i class="bi bi-truck"></i><div><div>Order #4821 has shipped</div><div class="notif-when">Yesterday</div></div></div>
                     </div>
                 </div>
+
+                <button class="user-menu" id="userMenuBtn">
+                    <span class="user-avatar">AH</span>
+                    <span class="user-info">
+                        <span class="user-name">Admin</span>
+                        <span class="user-role">Administrator</span>
+                    </span>
+                </button>
             </div>
         </header>
 
@@ -340,6 +360,30 @@
                 <div class="modal-footer">
                     <button type="button" class="btn-ghost" data-bs-dismiss="modal">Cancel</button>
                     <button type="button" class="btn btn-danger" id="confirmBtn">Delete</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="upgradeModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Upgrade to Pro</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p class="mb-3">Unlock everything your store needs to grow.</p>
+                    <div class="detail-grid">
+                        <dt>Unlimited products</dt><dd>10,000 listings</dd>
+                        <dt>Team members</dt><dd>Up to 25 seats</dd>
+                        <dt>Storage</dt><dd>250 GB media</dd>
+                        <dt>Support</dt><dd>Priority 24/7</dd>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn-ghost" data-bs-dismiss="modal">Not now</button>
+                    <button type="button" class="btn-primary" id="upgradeCta">Contact Sales</button>
                 </div>
             </div>
         </div>

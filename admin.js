@@ -2,20 +2,11 @@
 (function () {
   "use strict";
 
-  const STORAGE_KEY = "mystore_products_v1";
+  const STORAGE_KEY = "mystore_products_v2";
   const PAGE_SIZE = 6;
   const MAX_IMAGES = 4;
 
-  const SEED = [
-    { id: 1,  name: "SUGAR PRO MAX",        category: "Health",     brand: "Taiva Naturals", sku: "SUG-PM-01", price: 999,  salePrice: 799,  stock: 42,  status: "Active",   featured: true,  unit: "Pack", shortDesc: "Daily sugar control capsules.", fullDesc: "Supports healthy blood sugar levels with 500mg of natural extracts.", images: [] },
-    { id: 2,  name: "Karela Jamun",          category: "Health",     brand: "Taiva Naturals", sku: "KAR-JM-02", price: 1299, salePrice: 1099, stock: 18,  status: "Active",   featured: false, unit: "Pack", shortDesc: "Karela and jamun wellness blend.", fullDesc: "Traditional Ayurvedic formula for blood sugar and weight support.", images: [] },
-    { id: 3,  name: "Wireless Headphones",   category: "Electronics", brand: "SoundMax",     sku: "WH-100-BLK", price: 2499, salePrice: 1999, stock: 0,   status: "Inactive", featured: true,  unit: "Piece", shortDesc: "40h battery over-ear headphones.", fullDesc: "Active noise cancellation, 40 hour battery life, Bluetooth 5.3.", images: [] },
-    { id: 4,  name: "Smart Watch",           category: "Electronics", brand: "FitPro",       sku: "SW-22-GLD", price: 3499, salePrice: null, stock: 7,   status: "Active",   featured: false, unit: "Piece", shortDesc: "AMOLED fitness watch with SpO2.", fullDesc: "1.85 inch AMOLED display, heart rate, SpO2, 10 day battery.", images: [] },
-    { id: 5,  name: "Running Shoes",         category: "Footwear",    brand: "FitPro",       sku: "RS-09-GRY", price: 2199, salePrice: 1799, stock: 25,  status: "Active",   featured: false, unit: "Pair",  shortDesc: "Lightweight road running shoes.", fullDesc: "Breathable mesh upper with responsive foam midsole.", images: [] },
-    { id: 6,  name: "Travel Backpack",       category: "Bags",        brand: "Traveller",    sku: "TB-40-NVY", price: 1899, salePrice: null, stock: 3,   status: "Active",   featured: true,  unit: "Piece", shortDesc: "40L cabin size travel backpack.", fullDesc: "Water resistant, USB charging port, hidden passport pocket.", images: [] },
-    { id: 7,  name: "Herbal Cure Oil",       category: "Health",     brand: "Taiva Naturals", sku: "HC-15-ML", price: 599,  salePrice: 449,  stock: 60,  status: "Active",   featured: false, unit: "Bottle", shortDesc: "Ayurvedic hair and scalp oil.", fullDesc: "Bhringraj and amla based oil for stronger hair.", images: [] },
-    { id: 8,  name: "Bluetooth Speaker",     category: "Electronics", brand: "SoundMax",     sku: "BS-20-BLU", price: 1499, salePrice: 1199, stock: 0,   status: "Inactive", featured: false, unit: "Piece", shortDesc: "Portable 20W speaker.", fullDesc: "IPX7 waterproof, 12 hour playtime, stereo pairing.", images: [] }
-  ];
+  const SEED = [];
 
   const PLACEHOLDER =
     "data:image/svg+xml;utf8," +
@@ -34,6 +25,7 @@
   let deleteId = null;
   let viewModal;
   let confirmModal;
+  let upgradeModal;
 
   const $ = (id) => document.getElementById(id);
 
@@ -127,11 +119,19 @@
     const rows = filtered.slice(start, start + PAGE_SIZE);
 
     if (!rows.length) {
+      const isEmptyStore = products.length === 0;
       body.innerHTML =
         '<tr><td colspan="10"><div class="empty-state">' +
-        '<i class="bi bi-inbox"></i>No products match your filters.' +
+        '<i class="bi ' + (isEmptyStore ? "bi-box-seam" : "bi-inbox") + '"></i>' +
+        (isEmptyStore ? "No products yet" : "No products match your filters") +
+        '<div>' + (isEmptyStore
+          ? "Add your first product to get started."
+          : "Try a different search or filter.") + "</div>" +
+        (isEmptyStore ? '<button class="btn-primary" data-action="add"><i class="bi bi-plus"></i> Add Product</button>' : "") +
         "</div></td></tr>";
-      $("pageInfo").textContent = "Showing 0 products";
+      $("pageInfo").textContent = products.length
+        ? "Showing 0 of 0 products"
+        : "No products yet";
       $("pagination").innerHTML = "";
       return;
     }
@@ -469,23 +469,40 @@
     }, 2600);
   }
 
+  function isMobile() {
+    return window.matchMedia("(max-width: 992px)").matches;
+  }
+
+  function toggleSidebar() {
+    const sidebar = $("sidebar");
+    const main = document.querySelector(".main-wrapper");
+
+    if (isMobile()) {
+      sidebar.classList.toggle("mobile-open");
+      $("sidebarOverlay").classList.toggle("show", sidebar.classList.contains("mobile-open"));
+      return;
+    }
+
+    const collapsed = sidebar.classList.toggle("collapsed");
+    main.classList.toggle("collapsed", collapsed);
+    $("sidebarOverlay").classList.remove("show");
+  }
+
   function closeSidebar() {
-    $("sidebar").classList.remove("show");
+    $("sidebar").classList.remove("mobile-open", "show");
     $("sidebarOverlay").classList.remove("show");
   }
 
   function init() {
     viewModal = new bootstrap.Modal($("viewModal"));
     confirmModal = new bootstrap.Modal($("confirmModal"));
+    upgradeModal = new bootstrap.Modal($("upgradeModal"));
 
     renderCategoryFilter();
     renderStats();
     applyFilters();
 
-    $("btnHamburger").addEventListener("click", () => {
-      $("sidebar").classList.add("show");
-      $("sidebarOverlay").classList.add("show");
-    });
+    $("btnHamburger").addEventListener("click", toggleSidebar);
 
     $("sidebarOverlay").addEventListener("click", closeSidebar);
 
@@ -532,6 +549,7 @@
       const id = Number(btn.dataset.id);
 
       if (btn.dataset.action === "view") viewProduct(id);
+      if (btn.dataset.action === "add") openDrawer("add");
       if (btn.dataset.action === "edit") {
         const p = products.find((x) => x.id === id);
         if (p) openDrawer("edit", p);
@@ -595,11 +613,37 @@
 
     $("themeBtn").addEventListener("click", () => {
       document.body.classList.toggle("dark-mode");
+      $("themeIcon").className = document.body.classList.contains("dark-mode")
+        ? "bi bi-moon-stars"
+        : "bi bi-sun";
       toast("Theme toggled.");
     });
 
-    $("notifBtn").addEventListener("click", () => {
-      toast("You have 3 unread notifications.");
+    $("notifBtn").addEventListener("click", (e) => {
+      e.stopPropagation();
+      const panel = $("notifPanel");
+      panel.classList.toggle("show");
+      if (panel.classList.contains("show")) {
+        const badge = $("notifBadge");
+        if (badge) badge.remove();
+      }
+    });
+
+    document.addEventListener("click", (e) => {
+      const target = e.target;
+      if (!target || typeof target.closest !== "function") return;
+      if (!target.closest(".notif-wrap")) $("notifPanel").classList.remove("show");
+    });
+
+    $("upgradeBtn").addEventListener("click", () => upgradeModal.show());
+
+    $("upgradeCta").addEventListener("click", () => {
+      upgradeModal.hide();
+      toast("We will contact you shortly.");
+    });
+
+    $("userMenuBtn").addEventListener("click", () => {
+      toast("Signed in as Admin");
     });
 
     $("globalSearch").addEventListener("input", (e) => {

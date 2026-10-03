@@ -44,3 +44,7 @@ document.getElementById('sidebarOverlay') && document.getElementById('sidebarOve
 function removeThumb(el){ if(el && el.parentElement){ el.parentElement.remove(); } }
 
 if(document.getElementById(" addBtn\)){document.getElementById(ddBtn\).addEventListener(\click\,openAddDrawer);}
+
+if(document.getElementById(" closeDrawerBtn\)){document.getElementById(\closeDrawerBtn\).addEventListener(\click\,closeDrawer);}
+if(document.getElementById(\cancelBtn\)){document.getElementById(\cancelBtn\).addEventListener(\click\,closeDrawer);}
+if(document.getElementById(\saveBtn\)){document.getElementById(\saveBtn\).addEventListener(\click\,saveProduct);}

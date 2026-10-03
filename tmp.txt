@@ -1,1 +1,0 @@
-function filtered(){const s=currentFilters.search.toLowerCase(),c=currentFilters.category,st=currentFilters.status;return allProducts.filter(p=>{const m=(p.name+p.sku+p.category).toLowerCase();return m.includes(s)&&(!c||p.category===c)&&(!st||p.status===st);});}

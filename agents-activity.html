@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Agent Activity — OMS Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css?v=10">
+  <style>
+    .period-tabs { display: flex; gap: 8px; flex-wrap: wrap; }
+    .period-tab { padding: 7px 14px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); color: var(--text-muted); font-size: 13px; cursor: pointer; font-weight: 500; }
+    .period-tab:hover { color: var(--text); }
+    .period-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .agent-row { cursor: pointer; }
+    .agent-row:hover td { background: rgba(21,101,192,0.04); }
+    .agent-detail-arrow { color: var(--text-muted); transition: transform .15s ease; }
+    .agent-row.open .agent-detail-arrow { transform: rotate(90deg); }
+    .revenue-cell { font-weight: 600; }
+    .drill-card { display: none; }
+    .drill-card.open { display: block; }
+    .role-badge { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; }
+    .role-super_admin { background:#d4edda; color:#155724; }
+    .role-manager { background:#cce5ff; color:#004085; }
+    .role-agent { background:#fff3cd; color:#856404; }
+    .role-viewer { background:#e2e3e5; color:#383d41; }
+    [data-theme="dark"] .role-super_admin { background:#00331a; color:#4caf50; }
+    [data-theme="dark"] .role-manager { background:#00264d; color:#66b0ff; }
+    [data-theme="dark"] .role-agent { background:#3d2e00; color:#ffd54f; }
+    [data-theme="dark"] .role-viewer { background:#333; color:#aaa; }
+    .stat-sub { font-size: 12px; color: var(--text-muted); }
+  </style>
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="assets/logo.png?v=2" alt="OMS" style="height:32px;width:auto;flex-shrink:0;">
+      <span class="logo-text">OMS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-label">Home</span></a>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-box"></i></span><span class="nav-label">Orders</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span><span class="nav-badge" id="orderBadge">0</span></a>
+      <div class="nav-sub"><a href="orders.html" class="nav-item">All orders</a><a href="orders-draft.html" class="nav-item">Drafts</a><a href="orders-abandoned.html" class="nav-item">Abandoned checkouts</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-tag"></i></span><span class="nav-label">Products</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="products.html" class="nav-item">All products</a><a href="products-collections.html" class="nav-item">Collections</a><a href="products-inventory.html" class="nav-item">Inventory</a><a href="products-purchase-orders.html" class="nav-item">Purchase orders</a><a href="products-transfers.html" class="nav-item">Transfers</a><a href="products-gift-cards.html" class="nav-item">Gift cards</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-label">Customers</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="customers.html" class="nav-item">All customers</a><a href="customers-segments.html" class="nav-item">Segments</a><a href="customers-companies.html" class="nav-item">Companies</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span><span class="nav-label">Growth</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="growth-attribution.html" class="nav-item">Attribution</a><a href="growth-campaigns.html" class="nav-item">Campaigns</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-file-lines"></i></span><span class="nav-label">Content</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="content-metaobjects.html" class="nav-item">Metaobjects</a><a href="content-files.html" class="nav-item">Files</a><a href="content-menus.html" class="nav-item">Menus</a><a href="content-blog.html" class="nav-item">Blog posts</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-globe"></i></span><span class="nav-label">Markets</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="markets-catalogs.html" class="nav-item">Catalogs</a><a href="markets-rollouts.html" class="nav-item">Rollouts</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span><span class="nav-label">Analytics</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="analytics-reports.html" class="nav-item">Reports</a><a href="analytics-liveview.html" class="nav-item">Live View</a></div>
+      <div class="nav-section nav-role-manager">Agents</div>
+      <a href="agents-activity.html" class="nav-item nav-role-manager active"><span class="nav-icon"><i class="fa-solid fa-user-tie"></i></span><span class="nav-label">Agent Activity</span></a>
+      <div class="nav-section">Settings</div>
+      <a href="users.html" class="nav-item nav-role-manager"><span class="nav-icon"><i class="fa-solid fa-user-gear"></i></span><span class="nav-label">Users</span></a>
+      <a href="settings.html" class="nav-item nav-role-restricted"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="logs.html" class="nav-item nav-role-restricted"><span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><span class="nav-label">Logs</span></a>
+      <a href="#" class="nav-item" onclick="logout()"><span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </nav>
+    <div class="sidebar-footer">Dev By Abdullah Al Hassan</div>
+  </div>
+
+  <div class="main-content">
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <button class="sidebar-toggle" id="mobileToggle" style="display:none"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-search">
+        <i class="fa-solid fa-search"></i>
+        <input type="text" placeholder="Search..." id="globalSearch">
+      </div>
+      <div class="topbar-actions">
+        <button id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button>
+        <div class="admin-avatar" id="adminAvatar" onclick="toggleProfileMenu(event)"><span id="avatarInitial">A</span></div>
+      </div>
+      <p style="font-size:11px;margin:4px 0;color:var(--text-muted);">Design and Developed by Abdullah Al Hassan</p>
+    </header>
+
+    <div class="page-content">
+      <div class="page-header">
+        <div>
+          <h1>Agent Activity</h1>
+          <div class="page-subtitle">Orders placed, dispatched, cancelled — day / week / month wise</div>
+        </div>
+        <div class="page-actions">
+          <div class="flex flex-center gap-8">
+            <div class="period-tabs" id="periodTabs">
+              <button class="period-tab" data-period="today" onclick="setPeriod('today')">Today</button>
+              <button class="period-tab" data-period="week" onclick="setPeriod('week')">Week</button>
+              <button class="period-tab" data-period="month" onclick="setPeriod('month')">Month</button>
+              <button class="period-tab active" data-period="all" onclick="setPeriod('all')">All time</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="stats-grid" id="statsGrid">
+        <div class="stat-card">
+          <div class="stat-label">Team Members</div>
+          <div class="stat-value" id="statMembers">0</div>
+          <div class="stat-sub" id="statMembersSub">0 agents</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Orders Placed</div>
+          <div class="stat-value" id="statOrders">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Dispatched</div>
+          <div class="stat-value" id="statDispatched">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cancelled</div>
+          <div class="stat-value" style="color:var(--danger);" id="statCancelled">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Pending</div>
+          <div class="stat-value" id="statPending">0</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-label">Cancellation Rate</div>
+          <div class="stat-value" id="statCancelRate">0%</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-top:24px;">
+        <div class="card-header">
+          <h3>Team Performance</h3>
+          <div class="flex flex-center gap-8">
+            <input type="text" placeholder="Search member..." id="agentSearch" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--card-bg);color:var(--text);min-width:180px;">
+            <select id="roleFilter" style="padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--card-bg);color:var(--text);">
+              <option value="all">All roles</option>
+              <option value="super_admin">Super Admin</option>
+              <option value="manager">Manager</option>
+              <option value="agent">Agent</option>
+              <option value="viewer">Viewer</option>
+            </select>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th></th>
+                  <th>Member</th>
+                  <th>Role</th>
+                  <th>Orders</th>
+                  <th>Dispatched</th>
+                  <th>Cancelled</th>
+                  <th>Pending</th>
+                  <th>Revenue</th>
+                </tr>
+              </thead>
+              <tbody id="activityBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <div class="card drill-card" id="drillCard" style="margin-top:24px;">
+        <div class="card-header">
+          <h3 id="drillTitle">Orders</h3>
+          <div class="flex flex-center gap-8">
+            <button class="btn btn-sm" onclick="closeDrill()"><i class="fa-solid fa-times"></i> Close</button>
+          </div>
+        </div>
+        <div class="card-body" style="padding:0;">
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Order</th>
+                  <th>Date</th>
+                  <th>Customer</th>
+                  <th>Status</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody id="drillBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="app.js?v=13"></script>
+  <script>
+    var period = 'all';
+    var drillAgentKey = null;
+
+    function roleLabel(r) {
+      var map = { super_admin: 'Super Admin', manager: 'Manager', agent: 'Agent', viewer: 'Viewer' };
+      return map[r] || r || '—';
+    }
+
+    function agentKeyOf(o) {
+      if (o.createdById) return 'u:' + o.createdById;
+      return 'n:' + (o.createdBy || 'Unknown');
+    }
+
+    function agentOf(o) {
+      var users = getUsers();
+      if (o.createdById) {
+        for (var i = 0; i < users.length; i++) {
+          if (users[i].id === o.createdById) {
+            return { key: 'u:' + users[i].id, id: users[i].id, name: users[i].name || users[i].username, username: users[i].username, role: users[i].role || 'agent' };
+          }
+        }
+      }
+      if (o.createdBy) {
+        for (var j = 0; j < users.length; j++) {
+          if (users[j].name === o.createdBy || users[j].username === o.createdBy) {
+            return { key: 'u:' + users[j].id, id: users[j].id, name: users[j].name || users[j].username, username: users[j].username, role: users[j].role || 'agent' };
+          }
+        }
+        return { key: 'n:' + o.createdBy, id: null, name: o.createdBy, username: '', role: null };
+      }
+      return { key: 'n:Unknown', id: null, name: 'Unknown', username: '', role: null };
+    }
+
+    function inPeriod(o) {
+      var t = new Date(o.createdAt).getTime();
+      var now = new Date().getTime();
+      if (period === 'today') {
+        var d = new Date(); d.setHours(0,0,0,0);
+        return t >= d.getTime() && t <= now + 86400000;
+      }
+      if (period === 'week') return t >= now - 7 * 86400000;
+      if (period === 'month') return t >= now - 30 * 86400000;
+      return true;
+    }
+
+    function isCancelled(o) {
+      return o.status === 'cancelled' || (getPaymentStatus(o) === 'cancelled' && getFulfillmentStatus(o) === 'cancelled');
+    }
+
+    function isDispatched(o) {
+      if (isCancelled(o)) return false;
+      var f = getFulfillmentStatus(o);
+      return f === 'fulfilled' || o.status === 'shipped' || o.status === 'delivered';
+    }
+
+    function isPending(o) {
+      return !isCancelled(o) && !isDispatched(o);
+    }
+
+    function periodLabel() {
+      var map = { today: 'today', week: 'last 7 days', month: 'last 30 days', all: 'all time' };
+      return map[period] || 'all time';
+    }
+
+    function setPeriod(p) {
+      period = p;
+      document.querySelectorAll('.period-tab').forEach(function(t) {
+        t.classList.toggle('active', t.getAttribute('data-period') === p);
+      });
+      renderActivity();
+    }
+
+    function renderActivity() {
+      var orders = getOrders().filter(inPeriod);
+      var users = getUsers();
+      var roleFilter = document.getElementById('roleFilter').value;
+      var search = (document.getElementById('agentSearch').value || '').toLowerCase();
+
+      var byKey = {};
+      orders.forEach(function(o) {
+        var a = agentOf(o);
+        var key = a.key;
+        if (!byKey[key]) {
+          byKey[key] = { key: key, id: a.id, name: a.name, username: a.username, role: a.role, orders: 0, dispatched: 0, cancelled: 0, pending: 0, revenue: 0 };
+        }
+        var g = byKey[key];
+        g.orders++;
+        if (isCancelled(o)) g.cancelled++;
+        else if (isDispatched(o)) { g.dispatched++; g.revenue += (o.total || 0); }
+        else { g.pending++; g.revenue += (o.total || 0); }
+      });
+
+      var rows = [];
+      var seen = {};
+      Object.keys(byKey).forEach(function(k) { seen[k] = true; rows.push(byKey[k]); });
+      users.forEach(function(u) {
+        var key = 'u:' + u.id;
+        if (!seen[key]) {
+          rows.push({ key: key, id: u.id, name: u.name || u.username, username: u.username, role: u.role || 'agent', orders: 0, dispatched: 0, cancelled: 0, pending: 0, revenue: 0 });
+        }
+      });
+
+      rows = rows.filter(function(r) {
+        if (roleFilter !== 'all' && r.role !== roleFilter) return false;
+        if (search) {
+          var hay = (r.name + ' ' + (r.username || '')).toLowerCase();
+          if (hay.indexOf(search) === -1) return false;
+        }
+        return true;
+      });
+
+      var cur = getCurrentUser();
+      if (cur && cur.role === 'manager') {
+        rows = rows.filter(function(r) { return r.role !== 'super_admin'; });
+      }
+
+      rows.sort(function(a, b) { return b.orders - a.orders; });
+
+      var totalOrders = 0, totalDisp = 0, totalCanc = 0, totalPending = 0;
+      rows.forEach(function(r) {
+        totalOrders += r.orders; totalDisp += r.dispatched; totalCanc += r.cancelled; totalPending += r.pending;
+      });
+      var agentCount = rows.filter(function(r) { return r.role === 'agent'; }).length;
+
+      document.getElementById('statMembers').textContent = rows.length;
+      document.getElementById('statMembersSub').textContent = agentCount + ' agent' + (agentCount === 1 ? '' : 's');
+      document.getElementById('statOrders').textContent = totalOrders;
+      document.getElementById('statDispatched').textContent = totalDisp;
+      document.getElementById('statCancelled').textContent = totalCanc;
+      document.getElementById('statPending').textContent = totalPending;
+      document.getElementById('statCancelRate').textContent = totalOrders ? Math.round(totalCanc / totalOrders * 100) + '%' : '0%';
+
+      var tbody = document.getElementById('activityBody');
+      if (rows.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="8" class="text-center no-match"><i class="fa-solid fa-users-slash" style="font-size:36px;opacity:0.3;margin-bottom:8px;display:block;"></i>No members found</td></tr>';
+        return;
+      }
+
+      tbody.innerHTML = rows.map(function(r) {
+        var isOpen = drillAgentKey === r.key;
+        var roleHtml = r.role ? '<span class="role-badge role-' + r.role + '">' + escapeHtml(roleLabel(r.role)) + '</span>' : '<span class="text-muted">—</span>';
+        var nameHtml = escapeHtml(r.name) + (r.username ? '<div class="text-muted" style="font-size:11px;">@' + escapeHtml(r.username) + '</div>' : '');
+        return '<tr class="agent-row ' + (isOpen ? 'open' : '') + '" onclick="toggleDrill(\'' + r.key.replace(/'/g, "\\'") + '\')">' +
+          '<td class="agent-detail-arrow"><i class="fa-solid fa-chevron-right"></i></td>' +
+          '<td><span class="font-medium">' + nameHtml + '</span></td>' +
+          '<td>' + roleHtml + '</td>' +
+          '<td>' + r.orders + '</td>' +
+          '<td style="color:var(--success);font-weight:600;">' + r.dispatched + '</td>' +
+          '<td style="color:var(--danger);font-weight:600;">' + r.cancelled + '</td>' +
+          '<td>' + r.pending + '</td>' +
+          '<td class="revenue-cell">' + formatCurrency(r.revenue) + '</td>' +
+        '</tr>';
+      }).join('');
+    }
+
+    function toggleDrill(key) {
+      if (drillAgentKey === key) { closeDrill(); return; }
+      drillAgentKey = key;
+      renderActivity();
+      renderDrill(key);
+    }
+
+    function closeDrill() {
+      drillAgentKey = null;
+      renderActivity();
+      var card = document.getElementById('drillCard');
+      if (card) card.classList.remove('open');
+    }
+
+    function renderDrill(key) {
+      var orders = getOrders().filter(inPeriod).filter(function(o) { return agentKeyOf(o) === key; });
+      orders.sort(function(a, b) { return new Date(b.createdAt) - new Date(a.createdAt); });
+      var users = getUsers();
+      var name = key.indexOf('u:') === 0 ? (users.filter(function(u){ return u.id === key.slice(2); })[0] || {}).name : key.slice(2);
+      if (!name) name = 'Unknown';
+      document.getElementById('drillTitle').textContent = name + ' — Orders (' + periodLabel() + ')';
+
+      var tbody = document.getElementById('drillBody');
+      if (orders.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="5" class="text-center no-match"><i class="fa-solid fa-inbox" style="font-size:36px;opacity:0.3;margin-bottom:8px;display:block;"></i>No orders in this period</td></tr>';
+      } else {
+        tbody.innerHTML = orders.map(function(o) {
+          var rowClass = isCancelled(o) ? 'order-row-link order-row-cancelled' : 'order-row-link';
+          return '<tr class="' + rowClass + '" onclick="window.open(\'orders-detail.html?id=' + encodeURIComponent(o.id) + '\')">' +
+            '<td><span style="color:var(--accent);font-weight:500;">' + escapeHtml(orderDisplayNo(o)) + (o.duplicatedFrom ? ' <span class="dup-badge">(Duplicate)</span>' : '') + '</span></td>' +
+            '<td>' + formatDateTime(o.createdAt) + '</td>' +
+            '<td>' + escapeHtml(o.customerName || 'Customer') + '</td>' +
+            '<td>' + getOrderBadgesHtml(o) + '</td>' +
+            '<td>' + formatCurrency(o.total) + '</td>' +
+          '</tr>';
+        }).join('');
+      }
+      var card = document.getElementById('drillCard');
+      if (card) card.classList.add('open');
+    }
+
+    function initPage() {
+      var cur = getCurrentUser();
+      if (cur && cur.role === 'manager') {
+        var opt = document.querySelector('#roleFilter option[value="super_admin"]');
+        if (opt) opt.remove();
+      }
+      document.getElementById('roleFilter').addEventListener('change', renderActivity);
+      document.getElementById('agentSearch').addEventListener('input', renderActivity);
+      document.addEventListener('taiva:sync', renderActivity);
+      renderActivity();
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>OMS - Order Management System | Taiva</title>
+  <meta name="description" content="Powerful Order Management System for your business. Track orders, manage customers, and grow with analytics.">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="landing.css?v=1">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#" class="nav-brand">
+        <img src="assets/logo.png" alt="OMS" onerror="this.style.display='none'">
+        <span>OMS<span class="brand-dot">.</span></span>
+      </a>
+      <div class="nav-links" id="navLinks">
+        <a href="#features">Features</a>
+        <a href="#how-it-works">How It Works</a>
+        <a href="#testimonials">Reviews</a>
+        <div class="nav-cta">
+          <a href="#auth" class="btn btn-ghost" onclick="switchTab('login')">Login</a>
+          <a href="#auth" class="btn btn-primary" onclick="switchTab('signup')">Sign Up</a>
+        </div>
+      </div>
+      <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobile()">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- HERO -->
+  <section class="hero" id="hero">
+    <div class="hero-content fade-up">
+      <div class="hero-badge">
+        <i class="fa-solid fa-bolt"></i> Order Management Simplified
+      </div>
+      <h1>Run Your Business <span class="gradient">Smarter</span> with OMS</h1>
+      <p>A powerful, all-in-one order management system. Track orders, manage customers, monitor inventory, and grow your business with real-time analytics.</p>
+      <div class="hero-buttons">
+        <a href="#auth" class="btn btn-primary btn-lg" onclick="switchTab('signup')">
+          <i class="fa-solid fa-rocket"></i> Get Started Free
+        </a>
+        <a href="#features" class="btn btn-ghost btn-lg">
+          <i class="fa-solid fa-play"></i> See Features
+        </a>
+      </div>
+      <div class="hero-stats">
+        <div class="hero-stat">
+          <h3>500+</h3>
+          <p>Orders Managed</p>
+        </div>
+        <div class="hero-stat">
+          <h3>50+</h3>
+          <p>Active Users</p>
+        </div>
+        <div class="hero-stat">
+          <h3>99.9%</h3>
+          <p>Uptime</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- FEATURES -->
+  <section class="section" id="features">
+    <div class="section-header fade-up">
+      <span class="section-label">Features</span>
+      <h2>Everything You Need to Manage Orders</h2>
+      <p>From order tracking to customer management, OMS has all the tools to scale your business efficiently.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><i class="fa-solid fa-boxes-stacked"></i></div>
+        <h3>Order Tracking</h3>
+        <p>Track every order from placement to delivery. Real-time status updates, shipping integration with Shiprocket, and automated notifications.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><i class="fa-solid fa-users"></i></div>
+        <h3>Customer Management</h3>
+        <p>Complete CRM with customer profiles, order history, segments, and company management. Know your customers better.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><i class="fa-solid fa-warehouse"></i></div>
+        <h3>Product Inventory</h3>
+        <p>Manage products, track inventory levels, handle purchase orders, and manage stock transfers between locations.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><i class="fa-solid fa-chart-line"></i></div>
+        <h3>Analytics Dashboard</h3>
+        <p>Real-time sales trends, revenue reports, and performance metrics. Make data-driven decisions with beautiful charts.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><i class="fa-solid fa-user-tie"></i></div>
+        <h3>Agent Monitoring</h3>
+        <p>Monitor agent activity, track performance, and manage team workflows. Perfect for call centers and support teams.</p>
+      </div>
+      <div class="feature-card fade-up">
+        <div class="feature-icon"><i class="fa-solid fa-bell"></i></div>
+        <h3>Push Notifications</h3>
+        <p>Instant push notifications for new orders, status changes, and important updates. Never miss a critical event.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- HOW IT WORKS -->
+  <section class="section" id="how-it-works" style="background:linear-gradient(180deg,#08041a 0%,#0c0624 50%,#08041a 100%)">
+    <div class="section-header fade-up">
+      <span class="section-label">How It Works</span>
+      <h2>Get Started in 3 Simple Steps</h2>
+      <p>No complicated setup. Start managing your orders in minutes.</p>
+    </div>
+    <div class="steps">
+      <div class="step fade-up">
+        <div class="step-num">1</div>
+        <h3>Create Account</h3>
+        <p>Sign up with your name, choose a username and password. Select your role as Manager or Agent.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">2</div>
+        <h3>Manage Orders</h3>
+        <p>Create, track, and fulfill orders. Add customers, assign shipping, and update statuses in real-time.</p>
+      </div>
+      <div class="step fade-up">
+        <div class="step-num">3</div>
+        <h3>Track & Grow</h3>
+        <p>Monitor analytics, track agent performance, and grow your business with data-driven insights.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- TESTIMONIALS -->
+  <section class="section" id="testimonials">
+    <div class="section-header fade-up">
+      <span class="section-label">Testimonials</span>
+      <h2>Loved by Teams Everywhere</h2>
+      <p>See what our users have to say about OMS.</p>
+    </div>
+    <div class="testimonials-grid">
+      <div class="testimonial-card fade-up">
+        <div class="testimonial-stars">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <blockquote>"OMS has completely transformed how we handle orders. The real-time tracking and analytics have helped us reduce delivery times by 40%."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">R</div>
+          <div class="testimonial-info">
+            <h4>Rajesh Kumar</h4>
+            <p>Operations Manager</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="testimonial-stars">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
+        </div>
+        <blockquote>"The agent monitoring feature is a game-changer. I can track my team's performance and ensure quality service for every customer."</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">P</div>
+          <div class="testimonial-info">
+            <h4>Priya Sharma</h4>
+            <p>Team Lead</p>
+          </div>
+        </div>
+      </div>
+      <div class="testimonial-card fade-up">
+        <div class="testimonial-stars">
+          <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star-half-stroke"></i>
+        </div>
+        <blockquote>"Simple, powerful, and easy to use. We switched from spreadsheets to OMS and never looked back. Highly recommended!"</blockquote>
+        <div class="testimonial-author">
+          <div class="testimonial-avatar">A</div>
+          <div class="testimonial-info">
+            <h4>Amit Patel</h4>
+            <p>Business Owner</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AUTH SECTION -->
+  <section class="section auth-section" id="auth">
+    <div class="section-header fade-up">
+      <span class="section-label">Get Started</span>
+      <h2>Welcome to OMS</h2>
+      <p>Login to your account or create a new one to get started.</p>
+    </div>
+    <div class="auth-wrapper fade-up">
+      <div class="auth-tabs">
+        <button class="auth-tab active" id="tabLogin" onclick="switchTab('login')">Login</button>
+        <button class="auth-tab" id="tabSignup" onclick="switchTab('signup')">Sign Up</button>
+      </div>
+
+      <!-- LOGIN FORM -->
+      <div class="auth-form" id="loginForm">
+        <h2>Welcome back</h2>
+        <p class="subtitle">Sign in to your account to continue</p>
+        <div class="auth-error" id="loginError"></div>
+        <div class="form-group">
+          <label for="loginUsername">Username</label>
+          <input type="text" id="loginUsername" placeholder="Enter your username" autocomplete="username">
+        </div>
+        <div class="form-group">
+          <label for="loginPassword">Password</label>
+          <input type="password" id="loginPassword" placeholder="Enter your password" autocomplete="current-password">
+        </div>
+        <button class="btn btn-primary btn-block" onclick="handleLogin()">
+          <i class="fa-solid fa-right-to-bracket"></i> Sign In
+        </button>
+        <div class="auth-separator"><span>Quick Access</span></div>
+        <button class="btn btn-ghost btn-block" onclick="quickLogin('manager')" style="margin-bottom:10px">
+          <i class="fa-solid fa-user-shield"></i> Login as Manager
+        </button>
+        <button class="btn btn-ghost btn-block" onclick="quickLogin('agent')">
+          <i class="fa-solid fa-user"></i> Login as Agent
+        </button>
+      </div>
+
+      <!-- SIGNUP FORM -->
+      <div class="auth-form" id="signupForm" style="display:none">
+        <h2>Create account</h2>
+        <p class="subtitle">Fill in your details to get started</p>
+        <div class="auth-error" id="signupError"></div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="signupName">Full Name</label>
+            <input type="text" id="signupName" placeholder="John Doe">
+          </div>
+          <div class="form-group">
+            <label for="signupUsername">Username</label>
+            <input type="text" id="signupUsername" placeholder="johndoe" autocomplete="username">
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-group">
+            <label for="signupPassword">Password</label>
+            <input type="password" id="signupPassword" placeholder="Min 6 characters" autocomplete="new-password">
+          </div>
+          <div class="form-group">
+            <label for="signupRole">Role</label>
+            <select id="signupRole">
+              <option value="agent">Agent</option>
+              <option value="manager">Manager</option>
+            </select>
+          </div>
+        </div>
+        <button class="btn btn-primary btn-block" onclick="handleSignup()">
+          <i class="fa-solid fa-user-plus"></i> Create Account
+        </button>
+        <p style="text-align:center;margin-top:16px;font-size:13px;color:var(--text-muted)">
+          Already have an account? <a href="#" onclick="switchTab('login')" style="font-weight:600">Sign in</a>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer class="footer">
+    <div class="footer-brand">
+      <img src="assets/logo.png" alt="OMS" onerror="this.style.display='none'">
+      <span>OMS</span>
+    </div>
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#how-it-works">How It Works</a>
+      <a href="#testimonials">Reviews</a>
+      <a href="#auth">Login</a>
+    </div>
+    <p>Designed and Developed by <strong>Abdullah Al Hassan</strong></p>
+    <p style="margin-top:8px;font-size:12px;color:var(--text-dim)">&copy; 2026 Taiva. All rights reserved.</p>
+  </footer>
+
+  <script src="landing.js?v=1"></script>
+</body>
+</html>

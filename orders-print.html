@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Print — OMS Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css?v=10">
+</head>
+<body class="print-page">
+<div class="print-toolbar print-no-print">
+<div style="display:flex;align-items:center;gap:12px;">
+<a href="javascript:history.back()" class="btn btn-sm"><i class="fa-solid fa-arrow-left"></i> Back</a>
+<span style="font-weight:600;font-size:14px;" id="docTitle">Invoice</span>
+</div>
+<button class="btn btn-accent" onclick="window.print()"><i class="fa-solid fa-print"></i> Print</button>
+</div>
+
+<div class="print-sheet" id="printSheet">
+<div id="printBody">Loading...</div>
+</div>
+
+<script src="app.js?v=13"></script>
+<script>
+initPage = function() {
+  requireAuth();
+  var id = getUrlParam('id');
+  var type = getUrlParam('type') || 'invoice';
+  document.getElementById('docTitle').textContent = type === 'packing' ? 'Packing Slip' : 'Invoice';
+  if (!id) { document.getElementById('printBody').innerHTML = '<p>No order id provided.</p>'; return; }
+  var o = findOrder(id);
+  if (!o) { document.getElementById('printBody').innerHTML = '<p>Order not found.</p>'; return; }
+  renderDoc(o, type);
+};
+
+function renderDoc(o, type) {
+  var settings = getData('settings', {});
+  var storeName = settings.storeName || 'OMS';
+  var storeEmail = settings.storeEmail || 'info@taiva.in';
+  var storePhone = settings.storePhone || '+91-9582908080';
+  var siteUrl = settings.siteUrl || 'https://taiva.in';
+
+  var itemsHtml = (o.items || []).map(function(it) {
+    return '<tr><td>' + escapeHtml(it.name) + '<br><span style="font-size:11px;color:#6e6e73;">SKU: ' + escapeHtml(it.sku || 'NA') + '</span></td><td>' + (it.qty || 1) + '</td><td>' + formatCurrency(it.price) + '</td><td style="text-align:right;">' + formatCurrency((it.price || 0) * (it.qty || 1)) + '</td></tr>';
+  }).join('');
+
+  var totalsHtml =
+    '<div class="pt-row"><span>Subtotal</span><span>' + formatCurrency(o.subtotal || o.total) + '</span></div>' +
+    (o.discount && o.discount > 0 ? '<div class="pt-row"><span>Discount</span><span>' + (o.discountType === 'percent' ? '(' + (o.discountVal||0) + '%) ' : '') + '- ' + formatCurrency(o.discount) + '</span></div>' : '') +
+    '<div class="pt-row total"><span>Total</span><span>' + formatCurrency(o.total) + '</span></div>';
+
+  var title = type === 'packing' ? 'Packing Slip' : 'Tax Invoice';
+  var metaBlock = type === 'packing'
+    ? '<div><strong>Ship To:</strong><br>' + escapeHtml(o.customerName) + '<br>' + escapeHtml(o.address || '-') + (o.landmark ? '<br>Near ' + escapeHtml(o.landmark) : '') + '<br>' + escapeHtml(o.city || '') + (o.state ? ', ' + escapeHtml(o.state) : '') + ' - ' + escapeHtml(o.pincode || '') + '<br>' + escapeHtml(o.phone || '') + '</div>'
+    : '<div><strong>Bill To:</strong><br>' + escapeHtml(o.customerName) + '<br>' + escapeHtml(o.address || '-') + (o.landmark ? '<br>Near ' + escapeHtml(o.landmark) : '') + '<br>' + escapeHtml(o.city || '') + (o.state ? ', ' + escapeHtml(o.state) : '') + ' - ' + escapeHtml(o.pincode || '') + '<br>' + escapeHtml(o.phone || '') + '<br>' + (o.email ? escapeHtml(o.email) : '') + '</div>';
+
+  document.getElementById('printBody').innerHTML =
+    '<div class="doc-type">' + title + '</div>' +
+    '<div class="print-head">' +
+      '<div class="print-biz"><div class="pb-name">' + escapeHtml(storeName) + '</div>' + escapeHtml(storeEmail) + '<br>' + escapeHtml(storePhone) + '<br>' + escapeHtml(siteUrl) + '</div>' +
+      '<div class="print-meta"><strong>Order ' + escapeHtml(orderDisplayNo(o)) + '</strong><br>' + formatDateTime(o.createdAt) + '<br>Payment: ' + escapeHtml((o.paymentMethod || '').toUpperCase()) + '<br>Status: ' + getPaymentLabel(getPaymentStatus(o)) + ' / ' + getFulfillmentLabel(getFulfillmentStatus(o)) + '</div>' +
+    '</div>' +
+    '<div class="print-addresses">' + metaBlock + '</div>' +
+    '<table class="print-table"><thead><tr><th>Item</th><th>Qty</th><th>Price</th><th style="text-align:right;">Amount</th></tr></thead><tbody>' + itemsHtml + '</tbody></table>' +
+    '<div class="print-totals">' + totalsHtml + '</div>' +
+    '<div class="print-footer">This is a computer generated document. No signature required.</div>';
+}
+</script>
+</body>
+</html>

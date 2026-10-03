@@ -1,0 +1,351 @@
+================================================================================
+                     TAIVA ADMIN PANEL - SOP DOCUMENT
+================================================================================
+
+Document Purpose:
+-----------------
+This Standard Operating Procedure (SOP) document provides comprehensive guidance
+for using the Taiva Admin Panel, a Shopify-like management system for Taiva India.
+It covers all modules, user roles, workflows, and best practices for efficient
+administration.
+
+================================================================================
+                    1. LOGIN & ACCESS CONTROL
+================================================================================
+
+1.1 Login Procedure:
+   - Navigate to: https://taiva.in/Admin%20pannel/login.html
+   - Enter username and password
+   - Click "Sign in" or press Enter
+   - System validates credentials against server user list
+   - On successful login, user is redirected to dashboard.html
+
+1.2 Credential Management:
+   - Default super_admin credentials:
+     • Username: Admin
+     • Password: Taiva@2026FB
+   - New users can be created by super_admin only
+   - Passwords are stored encrypted in localStorage and synced from server
+
+1.3 Role-Based Access Control:
+   • super_admin: Full access to all modules
+   • manager: Read-only on Users page, most features accessible
+   • agent: Limited access (view orders/products, create orders with restrictions)
+   • viewer: View-only mode, no editing capabilities
+
+1.4 Session Management:
+   - Login creates sessionStorage entry: 'taiva_admin'
+   - Logout clears session and returns to login page
+   - Inactive sessions expire; re-login required
+
+================================================================================
+                    2. NAVIGATION STRUCTURE
+================================================================================
+
+2.1 Sidebar Navigation:
+   - Collapsible sidebar with main sections
+   - Sections: Main, Settings, Users, Analytics, Content, Markets, Growth
+   - Submenus expand/collapse on hover/click
+   - Active page highlighted in navigation
+
+2.2 Role-Restricted Navigation:
+   - nav-role-manager: Visible to manager/agent/super_admin roles
+   - nav-role-restricted: Visible only to super_admin
+   - nav-role-agent: Special agent-specific routing
+   - Navigation dynamically adjusts based on logged-in user role
+
+2.3 Topbar Actions:
+   - Global search bar (magnifying glass icon)
+   - Theme toggle (moon/sun icon for light/dark mode)
+   - Notification bell with dot indicator
+   - Admin avatar dropdown (user info/logout)
+
+================================================================================
+                    3. MODULE-SOPs
+================================================================================
+
+3.1 ORDERS MODULE SOP:
+   ----------------
+   3.1.1 Viewing Orders:
+     • Access via sidebar: Orders → All orders
+     • Use filters: payment status, fulfillment status, date range
+     • Search by order ID, customer name, phone, email
+     • Sort by: newest, oldest, total high-to-low, total low-to-high
+
+   3.1.2 Creating Orders:
+     • Click "Create order" button in orders toolbar
+     • Fill required fields: Customer Name, Phone, Address, City
+     • Add order items from product catalog
+     • Select payment method: COD, UPI, or Card
+     • Set discount: percentage or fixed amount (Rs.)
+     • Review subtotal, discount, total calculations
+     • Submit order (locally processes via Shiprocket API)
+     • Order status starts as "pending" / "unpaid" / "unfulfilled"
+
+   3.1.3 Bulk Actions:
+     • Select multiple orders via checkboxes
+     • Bulk mark as paid
+     • Bulk fulfill orders
+     • Bulk cancel orders
+     • Bulk add tags
+     • Export selected orders to CSV
+     • Export all filtered orders to CSV
+
+   3.1.3 Column Customization:
+     • Click "Columns" kebab menu
+     • Show/hide columns: Date, Customer, Items, Total, Payment, Fulfillment, Tags, Actions
+     • Save current filter view with custom name
+     • Load saved views for quick filtering
+
+   3.1.4 Order Details:
+     • Click order number to open detailed view
+     • Print invoice via print button
+     • Add internal notes to orders
+     • View order timeline/activity history
+     • Manage risk levels (low/medium/high)
+
+3.2 PRODUCTS MODULE SOP:
+   ----------------
+   3.2.1 Adding Products:
+     • Click "Add product" button
+     • Enter product name (required)
+     • Set price (Rs.) and original price (optional)
+     • Select category from predefined list or add custom
+     • Set stock quantity
+     • Upload product images (URL or file upload, max 5MB)
+     • Enter SKU (auto-generated or manual)
+     • Submit product
+
+   3.2.2 Product Categories:
+     • Predefined: Sugar Control, Digestive, Joint Care, General
+     • Custom categories can be added
+     • Category filtering available in product grid
+
+   3.2.3 Product Views:
+     • Grid view: Product cards with image, price, stock status
+     • Table view: Detailed product table with all attributes
+     • Toggle between views using view toggle buttons
+
+   3.2.4 Publishing to Web:
+     • Each product can be published to website
+     • Configure: Selling price, original price, category
+     • Add benefits, rating, review count
+     • Upload product images gallery
+     • Set status: Active/invisible on website
+     • Publish/unpublish from website
+
+   3.2.5 Product Inventory:
+     • Track stock levels per product
+     • Low stock alert: stock <= 5
+     • Out of stock: stock <= 0
+     • Update stock when selling/restocking
+
+3.3 CUSTOMERS MODULE SOP:
+   ----------------
+   3.3.1 Viewing Customers:
+     • Access via sidebar: Customers → All customers
+     • Customer profiles derived from associated orders
+     • Search by name, phone, or email
+     • View total orders, total spent, last order date
+
+   3.3.2 Customer Details:
+     • Click customer to view order history
+     • See all orders associated with customer
+     • Filter orders by status, date, etc.
+     • Export customer data if needed
+
+   3.3.3 Customer Segments:
+     • View customer segments (if configured)
+     • Segment by order history, spending patterns
+     • Targeted marketing capabilities
+
+3.4 USER & ROLES SOP:
+   ----------------
+   3.4.1 User Creation:
+     • Only super_admin can create new users
+     • Navigate: Users → Add user (button)
+     • Fill: Username, Password, Full Name, Role, Status
+     • Role options: super_admin, manager, agent, viewer
+     • Status: active or inactive
+     • New user gets auto-generated ID (USR + timestamp)
+
+   3.4.2 User Editing:
+     • Super_admin/manager can edit existing users
+     • Click edit button on user row
+     • Modify: Username, password (if needed), name, role, status
+     • Save changes
+
+   3.4.4 User Deletion:
+     • super_admin can delete users
+     • Cannot delete the default "Admin" user
+     • Confirm deletion action
+     • Delete permanently removes user from system
+
+   3.4.5 Role Permissions Matrix:
+     • super_admin: Full access, can manage all users
+     • manager: Can view/edit users (except Admin), read-only certain features
+     • agent: Limited user management, can create own orders
+     • viewer: View-only, cannot create/edit users
+
+3.5 ANALYTICS & REPORTS SOP:
+   ----------------
+   3.5.1 Running Reports:
+     • Access via sidebar: Analytics → Reports
+     • Set date range: From/To date pickers
+     • Click "Apply" to refresh all charts
+     • Reports auto-refresh on page show
+
+   3.5.2 Available Reports:
+     • Sales Overview: 30-day sales trend chart
+     • Top Products: Product sales pie chart
+     • Orders Trend: Daily order count line chart
+     • Payment Methods: COD/UPI/Card doughnut chart
+     • Summary metrics: Total revenue, orders, avg order value,
+       total products sold
+
+   3.5.3 Interpreting Charts:
+     • Sales chart: Bars represent daily revenue in Rs.
+     • Products chart: Slices show product sales distribution
+     • Orders chart: Line shows order count over 30 days
+     • Payment chart: Segments show revenue by payment method
+
+3.6 SETTINGS SOP:
+   -------------
+   3.6.1 Store Settings:
+     • Store name, email, phone, currency (INR)
+     • Save changes via "Save" button
+
+   3.6.2 Shiprocket Integration:
+     • Enter Shiprocket email and password
+     • Optional: CORS proxy URL
+     • Save credentials and test connection
+     • Orders processed as Cash on Delivery when not configured
+
+   3.6.3 Email Notifications:
+     • Sender name and email address
+     • Website URL for order confirmations
+     • Test email functionality
+     • Customer orders auto-email on status changes
+
+   3.6.4 Milesweb Backup (Primary):
+     • Milesweb API URL: https://taiva.in/Admin pannel/api.php
+     • Access Token: MilesToken@2026
+     • Auto-sync on data change (configurable)
+     • Backup Now: Manual backup to Milesweb server
+     • Restore from Milesweb: Overwrite local data with server data
+
+   3.6.5 Google Sheets Backup (Secondary):
+     • Google Apps Script URL (pre-configured default)
+     • Access Token: TaivaBackup@2026
+     • Auto-sync on data change (configurable)
+     • Backup Now: Manual backup to Google Sheets
+     • Restore from Sheets: Overwrite local data with Sheets data
+
+   3.6.6 About Section:
+     • App version: 1.0.0
+     • Taiva Admin Panel description
+     • Shopify-like management for Taiva India
+
+================================================================================
+                    4. TECHNICAL SPECIFICATIONS
+================================================================================
+
+4.1 Data Storage:
+   • localStorage: All admin data stored in browser localStorage
+   • Keys: taiva_users, taiva_orders, taiva_products, etc.
+   • sessionStorage: Current user session (taiva_admin)
+
+4.2 Server Integration:
+   • API Endpoint: https://taiva.in/Admin%20pannel/api.php
+   • Token: MilesToken@2026
+   • Actions: load, save, sync, backup, restore
+   • User management API for server-side user lists
+
+4.3 Synchronization:
+   • syncUsersFromServer(): Fetches user list from API on login
+   • mergeUsers(): Merges server and local user data
+   • Auto-sync on data change for products, webProducts
+   • Manual backup/restore to Milesweb and Google Sheets
+
+4.4 Frontend Technology:
+   • HTML5, CSS3, JavaScript
+   • Font Awesome 6.5.0 for icons
+   • Chart.js 4.4.0 for analytics charts
+   • Responsive design (mobile-friendly)
+   • Light/dark theme support
+
+4.5 Browser Compatibility:
+   • Chrome, Firefox, Edge, Safari (latest versions)
+   • Touch-friendly for tablet use
+   • Requires JavaScript enabled
+
+================================================================================
+                    5. TROUBLESHOOTING
+================================================================================
+
+5.1 Common Issues:
+   • "Invalid username or password" error:
+     - Verify credentials are correct
+     - Ensure user exists on server
+     - Check if user status is "active"
+     - Clear browser cache if needed
+
+   • Orders not syncing:
+     - Check Milesweb configuration
+     • Verify API token and URL
+     • Manual backup if auto-sync fails
+
+   • Products not publishing to web:
+     - Ensure images uploaded
+     • Set product to "Active" status
+     • Check category configuration
+
+   • Navigation missing after login:
+     - Refresh page (F5)
+     - Check role permissions
+     • Re-login if session expired
+
+5.2 Support Contacts:
+   • For technical issues: Contact system administrator
+   • For data recovery: Use Milesweb backup or Google Sheets restore
+   • For feature requests: Submit via support channel
+
+================================================================================
+                    6. QUICK REFERENCE CARD
+================================================================================
+
+6.1 Daily Workflows:
+   • Morning: Login → Check dashboard stats → Review new orders
+   • Throughout day: Process orders, update inventory, respond to customers
+   • End of day: Run reports → Backup data → Log out
+
+6.2 Key Shortcuts:
+   • Press Enter on password field to submit login
+   • Escape key to close modals
+   • Ctrl+S (or use Save buttons) to save changes
+
+6.3 Emergency Procedures:
+   • If locked out: Contact super_admin for access recovery
+   • If data lost: Use Milesweb backup or Google Sheets restore
+   • If page malfunction: Refresh browser, clear cache if needed
+
+================================================================================
+                          VERSION HISTORY
+================================================================================
+
+Version 1.0.0 (2026-08-12):
+• Initial SOP document creation
+• Comprehensive module documentation
+• Role-based access control guidelines
+• Backup and recovery procedures
+• Client presentation SOP included
+
+================================================================================
+                      DESIGN AND DEVELOPED BY
+================================================================================
+          Abdullaha al hassan
+          Taiva Admin Panel v1.0.0
+
+================================================================================
+                        END OF DOCUMENT
+================================================================================

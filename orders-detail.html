@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Order Details — OMS Admin</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+<link rel="stylesheet" href="style.css?v=10">
+<style>
+.order-item-row { display: flex; gap: 8px; margin-bottom: 8px; align-items: center; }
+.order-item-row select { flex: 2; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); color: var(--text); }
+.order-item-row input[type="number"] { flex: 0 0 60px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--card-bg); color: var(--text); }
+.order-item-row .editPrice { flex: 0 0 80px; padding: 6px 8px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--page-bg); color: var(--text); }
+</style>
+</head>
+<body>
+
+<div class="sidebar" id="sidebar">
+<div class="sidebar-header">
+<img src="assets/logo.png?v=2" alt="OMS" style="height:32px;width:auto;flex-shrink:0;">
+<span class="logo-text">OMS</span>
+</div>
+<nav class="sidebar-nav">
+<div class="nav-section">Main</div>
+<a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-label">Home</span></a>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-box"></i></span><span class="nav-label">Orders</span><span class="nav-arrow open"><i class="fa-solid fa-chevron-right"></i></span><span class="nav-badge" id="orderBadge">0</span></a>
+<div class="nav-sub open">
+<a href="orders.html" class="nav-item">All orders</a>
+<a href="orders-draft.html" class="nav-item">Drafts</a>
+<a href="orders-abandoned.html" class="nav-item">Abandoned checkouts</a>
+</div>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-tag"></i></span><span class="nav-label">Products</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+<div class="nav-sub">
+<a href="products.html" class="nav-item">All products</a>
+<a href="products-collections.html" class="nav-item">Collections</a>
+<a href="products-inventory.html" class="nav-item">Inventory</a>
+<a href="products-purchase-orders.html" class="nav-item">Purchase orders</a>
+<a href="products-transfers.html" class="nav-item">Transfers</a>
+<a href="products-gift-cards.html" class="nav-item">Gift cards</a>
+</div>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-label">Customers</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+<div class="nav-sub">
+<a href="customers.html" class="nav-item">All customers</a>
+<a href="customers-segments.html" class="nav-item">Segments</a>
+<a href="customers-companies.html" class="nav-item">Companies</a>
+</div>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span><span class="nav-label">Growth</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+<div class="nav-sub">
+<a href="growth-attribution.html" class="nav-item">Attribution</a>
+<a href="growth-campaigns.html" class="nav-item">Campaigns</a>
+</div>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-file-lines"></i></span><span class="nav-label">Content</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+<div class="nav-sub">
+<a href="content-metaobjects.html" class="nav-item">Metaobjects</a>
+<a href="content-files.html" class="nav-item">Files</a>
+<a href="content-menus.html" class="nav-item">Menus</a>
+<a href="content-blog.html" class="nav-item">Blog posts</a>
+</div>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-globe"></i></span><span class="nav-label">Markets</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+<div class="nav-sub">
+<a href="markets-catalogs.html" class="nav-item">Catalogs</a>
+<a href="markets-rollouts.html" class="nav-item">Rollouts</a>
+</div>
+<a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span><span class="nav-label">Analytics</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+<div class="nav-sub">
+<a href="analytics-reports.html" class="nav-item">Reports</a>
+<a href="analytics-liveview.html" class="nav-item">Live View</a>
+</div>
+<div class="nav-section nav-role-manager">Agents</div>
+<a href="agents-activity.html" class="nav-item nav-role-manager"><span class="nav-icon"><i class="fa-solid fa-user-tie"></i></span><span class="nav-label">Agent Activity</span></a>
+<div class="nav-section">Settings</div>
+<a href="users.html" class="nav-item nav-role-manager"><span class="nav-icon"><i class="fa-solid fa-user-gear"></i></span><span class="nav-label">Users</span></a>
+<a href="settings.html" class="nav-item nav-role-restricted"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+<a href="logs.html" class="nav-item nav-role-restricted"><span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><span class="nav-label">Logs</span></a>
+<a href="#" class="nav-item" onclick="logout()"><span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+</nav>
+<div class="sidebar-footer">Dev By Abdullah Al Hassan</div>
+</div>
+
+<div class="main-content">
+<header class="topbar">
+<button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+<button class="sidebar-toggle" id="mobileToggle" style="display:none"><i class="fa-solid fa-bars"></i></button>
+<div class="topbar-search">
+<i class="fa-solid fa-search"></i>
+<input type="text" placeholder="Search..." id="globalSearch">
+</div>
+<div class="topbar-actions">
+<button id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+<button><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button>
+<div class="admin-avatar" id="adminAvatar" onclick="toggleProfileMenu(event)"><span id="avatarInitial">A</span></div>
+</div>
+</header>
+
+<div class="page-content" id="pageContent">
+<div id="detailRoot">
+<div class="text-center" style="padding:60px;"><i class="fa-solid fa-spinner fa-spin" style="font-size:28px;color:var(--text-muted);"></i><p class="mt-8 text-muted">Loading order...</p></div>
+</div>
+</div>
+</div>
+
+<!-- Edit Order Modal -->
+<div class="modal" id="editOrderModal">
+<div class="modal-header"><h2 id="editOrderTitle">Edit Order</h2><button class="modal-close" onclick="closeModal('editOrderModal')">&times;</button></div>
+<div class="modal-body">
+<input type="hidden" id="editOrderId">
+<div class="form-row">
+<div class="form-group"><label>Customer Name</label><input type="text" id="editName"></div>
+<div class="form-group"><label>Phone</label><input type="text" id="editPhone"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Email</label><input type="email" id="editEmail"></div>
+<div class="form-group"><label>Tags (comma separated)</label><input type="text" id="editTags"></div>
+</div>
+<div class="form-group"><label>Address</label><input type="text" id="editAddress"></div>
+<div class="form-group"><label>Landmark</label><input type="text" id="editLandmark" placeholder="Near..., optional"></div>
+<div class="form-row">
+<div class="form-group"><label>City</label><input type="text" id="editCity"></div>
+<div class="form-group"><label>State</label><input type="text" id="editState"></div>
+</div>
+<div class="form-row">
+<div class="form-group"><label>Pincode</label><input type="text" id="editPincode"></div>
+<div class="form-group"><label>Risk level</label>
+<select id="editRisk"><option value="low">Low</option><option value="medium">Medium</option><option value="high">High</option></select>
+</div>
+</div>
+<div class="form-group"><label>Internal staff note (sirf staff ko dikhega)</label><textarea id="editInternalNote"></textarea></div>
+<div id="editOrderItemsSection" style="display:none;">
+<div class="form-group" style="border-top:1px solid var(--border);padding-top:12px;margin-top:12px;">
+<label>Order Items</label>
+<div id="editItemsContainer"></div>
+<button class="btn btn-sm" onclick="addEditItem()" style="margin-top:4px;"><i class="fa-solid fa-plus"></i> Add item</button>
+</div>
+<div class="form-group">
+<label>Payment Method</label>
+<div style="display:flex;gap:16px;margin-top:4px;">
+<label style="display:flex;align-items:center;gap:4px;"><input type="radio" name="editPayment" value="cod" checked> COD</label>
+<label style="display:flex;align-items:center;gap:4px;"><input type="radio" name="editPayment" value="upi"> UPI</label>
+<label style="display:flex;align-items:center;gap:4px;"><input type="radio" name="editPayment" value="card"> Card</label>
+</div>
+</div>
+<div class="form-group">
+<label>Discount</label>
+<div class="form-row">
+<div class="form-group" style="margin-bottom:0;">
+<select id="editDiscountType" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:var(--card-bg);color:var(--text);outline:none;" onchange="calcEditTotal()">
+<option value="percent">Percentage (%)</option>
+<option value="fixed">Fixed (Rs.)</option>
+</select>
+</div>
+<div class="form-group" style="margin-bottom:0;"><input type="number" id="editDiscount" placeholder="0" min="0" value="0" oninput="calcEditTotal()" style="width:100%;padding:8px 12px;border:1px solid var(--border);border-radius:var(--radius);font-size:14px;background:var(--card-bg);color:var(--text);outline:none;"></div>
+</div>
+</div>
+<div class="form-group" style="border-top:1px solid var(--border);padding-top:12px;">
+<div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text-muted);"><span>Subtotal:</span><span id="editSubtotal">Rs. 0</span></div>
+<div style="display:flex;justify-content:space-between;font-size:14px;color:var(--text-muted);"><span>Discount:</span><span id="editDiscountDisplay">- Rs. 0</span></div>
+<div style="display:flex;justify-content:space-between;font-size:16px;font-weight:600;margin-top:8px;padding-top:8px;border-top:1px solid var(--border);"><span>Total:</span><span id="editTotal">Rs. 0</span></div>
+</div>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn" onclick="closeModal('editOrderModal')">Cancel</button>
+<button class="btn btn-accent" onclick="saveEditedOrder()" id="editOrderSaveBtn"><i class="fa-solid fa-check"></i> Save</button>
+</div>
+</div>
+
+<!-- Cancel Modal -->
+<div class="modal" id="cancelOrderModal">
+<div class="modal-header"><h2>Cancel Order</h2><button class="modal-close" onclick="closeModal('cancelOrderModal')">&times;</button></div>
+<div class="modal-body">
+<p style="font-size:13px;margin-bottom:12px;">This will mark the order as cancelled. This action cannot be undone.</p>
+<div class="form-group"><label>Reason</label>
+<select id="cancelReason">
+<option value="customer_requested">Customer requested</option>
+<option value="out_of_stock">Out of stock</option>
+<option value="payment_failed">Payment failed</option>
+<option value="fraud_risk">Fraud risk</option>
+<option value="duplicate">Duplicate order</option>
+<option value="other">Other</option>
+</select>
+</div>
+</div>
+<div class="modal-footer">
+<button class="btn" onclick="closeModal('cancelOrderModal')">Keep order</button>
+<button class="btn btn-danger" onclick="confirmCancelOrder()"><i class="fa-solid fa-ban"></i> Cancel Order</button>
+</div>
+</div>
+
+<!-- Refund Modal -->
+<div class="modal" id="refundModal">
+<div class="modal-header"><h2>Issue Refund</h2><button class="modal-close" onclick="closeModal('refundModal')">&times;</button></div>
+<div class="modal-body">
+<div class="form-group"><label>Refund amount</label><input type="number" id="refundAmount" min="0" step="1"></div>
+<div class="form-group"><label>Note (optional)</label><input type="text" id="refundNote" placeholder="Refund note"></div>
+</div>
+<div class="modal-footer">
+<button class="btn" onclick="closeModal('refundModal')">Cancel</button>
+<button class="btn btn-danger" onclick="confirmRefund()"><i class="fa-solid fa-money-bill-wave"></i> Refund</button>
+</div>
+</div>
+
+<!-- Tracking Modal -->
+<div class="modal" id="trackingModal">
+<div class="modal-header"><h2>Add Fulfillment</h2><button class="modal-close" onclick="closeModal('trackingModal')">&times;</button></div>
+<div class="modal-body">
+<div class="form-group"><label>Carrier / Courier company</label>
+<select id="trackCarrier">
+<option value="Shiprocket">Shiprocket</option>
+<option value="Delhivery">Delhivery</option>
+<option value="BlueDart">Blue Dart</option>
+<option value="DTDC">DTDC</option>
+<option value="XpressBees">XpressBees</option>
+<option value="India Post">India Post</option>
+<option value="Other">Other</option>
+</select>
+</div>
+<div class="form-group"><label>Tracking number</label><input type="text" id="trackNumber" placeholder="AWB / Tracking number"></div>
+</div>
+<div class="modal-footer">
+<button class="btn" onclick="closeModal('trackingModal')">Cancel</button>
+<button class="btn btn-accent" onclick="confirmTracking()"><i class="fa-solid fa-box-open"></i> Mark as fulfilled</button>
+</div>
+</div>
+
+<!-- Add Tag Modal -->
+<div class="modal" id="tagModal">
+<div class="modal-header"><h2>Add Tags</h2><button class="modal-close" onclick="closeModal('tagModal')">&times;</button></div>
+<div class="modal-body">
+<div class="form-group"><label>Tags (comma separated)</label><input type="text" id="addTagInput" placeholder="VIP, urgent, COD"></div>
+</div>
+<div class="modal-footer">
+<button class="btn" onclick="closeModal('tagModal')">Cancel</button>
+<button class="btn btn-accent" onclick="confirmAddTags()"><i class="fa-solid fa-tag"></i> Add</button>
+</div>
+</div>
+
+<!-- Delete Modal -->
+<div class="modal" id="deleteModal">
+<div class="modal-header"><h2>Delete Order</h2><button class="modal-close" onclick="closeModal('deleteModal')">&times;</button></div>
+<div class="modal-body"><p style="font-size:13px;">Are you sure you want to permanently delete this order?</p></div>
+<div class="modal-footer">
+<button class="btn" onclick="closeModal('deleteModal')">Cancel</button>
+<button class="btn btn-danger" onclick="confirmDeleteOrder()"><i class="fa-solid fa-trash"></i> Delete</button>
+</div>
+</div>
+
+<div class="modal-overlay" id="modalOverlay" onclick="closeAllModals()"></div>
+
+<script src="data/indian-cities.js"></script>
+<script src="app.js?v=13"></script>
+<script>
+var currentOrder = null;
+var detailId = null;
+var duplicateMode = false;
+
+initPage = function() {
+  detailId = getUrlParam('id');
+  if (!detailId) { renderNotFound(); return; }
+  renderOrder();
+  document.addEventListener('taiva:sync', function() {
+    if (findOrder(detailId)) renderOrder();
+  });
+};
+
+function renderOrder() {
+  currentOrder = findOrder(detailId);
+  if (!currentOrder) { renderNotFound(); return; }
+  var cur = getCurrentUser();
+  if (cur && cur.role === 'agent' && hasRight(cur, 'own_orders_only')) {
+    var mine = (currentOrder.createdById && currentOrder.createdById === cur.id) ||
+      (currentOrder.createdBy && (currentOrder.createdBy === cur.name || currentOrder.createdBy === cur.username || currentOrder.createdBy === cur.user));
+    if (!mine) {
+      document.getElementById('detailRoot').innerHTML =
+        '<div class="card" style="padding:60px;text-align:center;">' +
+        '<i class="fa-solid fa-lock" style="font-size:44px;color:var(--text-muted);opacity:0.4;"></i>' +
+        '<h3 style="margin:12px 0 4px;">Access denied</h3>' +
+        '<p class="text-muted">You can only view your own orders.</p>' +
+        '<a class="btn btn-accent mt-16" href="orders.html"><i class="fa-solid fa-arrow-left"></i> Back to Orders</a></div>';
+      return;
+    }
+  }
+  renderHeader();
+  renderProgress();
+  renderTimeline();
+  renderSuggestion();
+  renderPayment();
+  renderItems();
+  renderFulfillments();
+  renderCustomer();
+  renderAddress();
+}
+
+function renderNotFound() {
+  document.getElementById('detailRoot').innerHTML =
+    '<div class="card" style="padding:60px;text-align:center;">' +
+    '<i class="fa-solid fa-box-open" style="font-size:44px;color:var(--text-muted);opacity:0.4;"></i>' +
+    '<h3 style="margin:12px 0 4px;">Order not found</h3>' +
+    '<p class="text-muted">The order may have been deleted.</p>' +
+    '<a class="btn btn-accent mt-16" href="orders.html"><i class="fa-solid fa-arrow-left"></i> Back to Orders</a></div>';
+}
+
+function renderHeader() {
+  var existing = document.querySelector('.order-detail-header');
+  if (existing) existing.remove();
+  var o = currentOrder;
+  var cur = getCurrentUser();
+  var canEdit = !(cur && cur.role === 'viewer');
+  var canDel = canDelete();
+  var html = '<div class="order-detail-header">' +
+    '<div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;">' +
+    '<a href="orders.html" class="btn btn-sm print-no-print"><i class="fa-solid fa-arrow-left"></i> Orders</a>' +
+    '<div><div class="order-detail-title">' + escapeHtml(orderDisplayNo(o)) + (o.duplicatedFrom ? ' <span class="dup-badge">(Duplicate)</span>' : '') + ' <span class="text-muted" style="font-size:13px;font-weight:400;">&middot; ' + escapeHtml(o.customerName) + '</span></div>' +
+    '<div class="order-detail-sub">Placed ' + formatDateTime(o.createdAt) + (o.createdBy ? ' by ' + escapeHtml(o.createdBy) : '') + '</div>' +
+    '<div class="order-badge-row">' + getOrderBadgesHtml(o) + '</div>' +
+    '<div class="mt-8">' + renderTagsHtml(o, true) + ' <button class="btn btn-sm" onclick="openTagModal()" style="padding:1px 8px;font-size:11px;"><i class="fa-solid fa-plus"></i> Tag</button></div>' +
+    '</div></div>' +
+    '<div class="kebab-menu" id="orderActionsMenu">' +
+    '<button class="km-btn" onclick="toggleKebab(event)"><i class="fa-solid fa-ellipsis-vertical"></i></button>' +
+    '<div class="km-drop">' + buildActionLinks(canEdit, canDel) + '</div>' +
+    '</div></div>';
+  document.getElementById('detailRoot').innerHTML = '<div class="order-detail-layout"><div class="order-detail-main" id="detailMain"></div><div class="order-detail-side" id="detailSide"></div></div>';
+  var wrap = document.createElement('div');
+  wrap.innerHTML = html;
+  document.getElementById('pageContent').insertBefore(wrap.firstChild, document.getElementById('detailRoot'));
+}
+
+function buildActionLinks(canEdit, canDel) {
+  var o = currentOrder;
+  var p = getPaymentStatus(o), f = getFulfillmentStatus(o);
+  var links = '';
+  if (p !== 'paid' && p !== 'cancelled') links += '<a onclick="markPaid()"><i class="fa-solid fa-money-check-dollar"></i> Mark as paid</a>';
+  if (f !== 'fulfilled' && p !== 'cancelled') links += '<a onclick="openTrackingModal()"><i class="fa-solid fa-box-open"></i> Fulfill order</a>';
+  if (p !== 'cancelled') links += '<a onclick="openRefundModal()"><i class="fa-solid fa-money-bill-wave"></i> Refund</a>';
+  if (canEdit) links += '<a onclick="openEditOrder()"><i class="fa-solid fa-pen"></i> Edit order</a>';
+  links += '<a onclick="duplicateOrder()"><i class="fa-solid fa-copy"></i> Duplicate order</a>';
+  links += '<a onclick="printOrderDoc(\'' + o.id + '\',\'invoice\')"><i class="fa-solid fa-print"></i> Print invoice</a>';
+  links += '<a onclick="printOrderDoc(\'' + o.id + '\',\'packing\')"><i class="fa-solid fa-print"></i> Print packing slip</a>';
+  if (o.archived) links += '<a onclick="toggleArchive()"><i class="fa-solid fa-box-archive"></i> Restore order</a>';
+  else links += '<a onclick="toggleArchive()"><i class="fa-solid fa-archive"></i> Archive order</a>';
+  if (p !== 'cancelled') { links += '<div class="km-sep"></div><a onclick="openCancelOrder()"><i class="fa-solid fa-ban"></i> Cancel order</a>'; }
+  if (canDel) links += '<div class="km-sep"></div><a class="km-danger" onclick="openDeleteModal()"><i class="fa-solid fa-trash"></i> Delete order</a>';
+  return links;
+}
+
+function toggleKebab(e) {
+  e.stopPropagation();
+  document.getElementById('orderActionsMenu').classList.toggle('open');
+}
+document.addEventListener('click', function(e) {
+  if (!e.target.closest('.kebab-menu')) document.querySelectorAll('.kebab-menu').forEach(function(m){ m.classList.remove('open'); });
+});
+
+function renderProgress() {
+  var o = currentOrder;
+  var p = getPaymentStatus(o), f = getFulfillmentStatus(o);
+  var isDelivered = !!o.deliveredAt;
+  var steps = [
+    { label: 'Order confirmed', done: true, time: formatDateTime(o.createdAt) },
+    { label: 'Paid', done: p === 'paid' || p === 'refunded' || p === 'partially_refunded', time: o.paidAt ? formatDateTime(o.paidAt) : '' },
+    { label: 'Fulfilled', done: f === 'fulfilled' || f === 'partially_fulfilled', time: o.fulfilledAt ? formatDateTime(o.fulfilledAt) : '' },
+    { label: 'Delivered', done: isDelivered, time: o.deliveredAt ? formatDateTime(o.deliveredAt) : '' }
+  ];
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Fulfillment progress</h3><span class="badge ' + fulfillmentBadgeClass(f) + '">' + getFulfillmentLabel(f) + '</span></div><div class="dc-body"><div class="progress-track">';
+  for (var i = 0; i < steps.length; i++) {
+    html += '<div class="progress-step ' + (steps[i].done ? 'done' : '') + '"><div class="ps-dot"><i class="fa-solid ' + (steps[i].done ? 'fa-check' : (i === 0 ? 'fa-check' : 'fa-circle')) + '"></i></div><div class="ps-label">' + steps[i].label + '</div><div class="ps-time">' + steps[i].time + '</div></div>';
+  }
+  html += '</div><div class="mt-16" style="display:flex;gap:8px;flex-wrap:wrap;">';
+  if (f !== 'fulfilled' && p !== 'cancelled') html += '<button class="btn btn-accent btn-sm" onclick="openTrackingModal()"><i class="fa-solid fa-box-open"></i> Fulfill order</button>';
+  if (p !== 'paid' && p !== 'cancelled') html += '<button class="btn btn-sm" onclick="markPaid()"><i class="fa-solid fa-money-check-dollar"></i> Mark as paid</button>';
+  if (f === 'fulfilled' && !isDelivered && p !== 'cancelled') html += '<button class="btn btn-sm" onclick="markDelivered()"><i class="fa-solid fa-truck-ramp-box"></i> Mark as delivered</button>';
+  html += '</div></div></div>';
+  document.getElementById('detailMain').insertAdjacentHTML('beforeend', html);
+}
+
+function renderTimeline() {
+  var o = currentOrder;
+  var events = (o.timeline || []).slice();
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Timeline</h3></div><div class="dc-body">';
+  if (events.length === 0) {
+    html += '<p class="text-muted" style="font-size:13px;">No activity yet.</p>';
+  } else {
+    html += '<div class="timeline">';
+    for (var i = 0; i < events.length; i++) {
+      var ev = events[i];
+      html += '<div class="timeline-item tl-' + timelineClass(ev.action) + '"><div class="tl-icon"><i class="fa-solid ' + timelineIcon(ev.action) + '"></i></div><div class="tl-title">' + escapeHtml(formatTimelineAction(ev.action)) + '</div>' + (ev.details ? '<div class="tl-details">' + escapeHtml(ev.details) + '</div>' : '') + '<div class="tl-meta">' + formatDateTime(ev.timestamp) + (ev.user ? ' &middot; ' + escapeHtml(ev.user) : '') + '</div></div>';
+    }
+    html += '</div>';
+  }
+  html += '<div class="timeline-input"><input type="text" id="noteInput" placeholder="Add a note..."><button class="btn btn-sm btn-accent" onclick="addNote(false)"><i class="fa-solid fa-plus"></i> Note</button></div>';
+  html += '<div class="timeline-input"><input type="text" id="staffNoteInput" placeholder="Internal staff note (sirf aapko dikhega)..."><button class="btn btn-sm" onclick="addNote(true)"><i class="fa-solid fa-user-gear"></i> Staff</button></div>';
+  html += '</div></div>';
+  document.getElementById('detailMain').insertAdjacentHTML('beforeend', html);
+}
+
+function timelineIcon(action) {
+  var map = { created:'fa-plus', payment:'fa-money-check-dollar', payment_marked:'fa-money-check-dollar', capture:'fa-money-check-dollar', refund:'fa-money-bill-wave', cancelled:'fa-ban', fulfilled:'fa-box-open', shipped:'fa-truck', delivered:'fa-house-circle-check', note:'fa-note-sticky', staff_note:'fa-user-gear', edited:'fa-pen', email_sent:'fa-envelope', tracking_added:'fa-location-dot', duplicate:'fa-copy', archived:'fa-archive', restored:'fa-box-archive', reminder:'fa-bell', recovered:'fa-check' };
+  return map[action] || 'fa-circle';
+}
+function timelineClass(action) {
+  var ok = ['payment','payment_marked','capture','fulfilled','shipped','delivered','recovered','restored'];
+  var bad = ['cancelled','refund'];
+  if (ok.indexOf(action) !== -1) return 'success';
+  if (bad.indexOf(action) !== -1) return 'danger';
+  if (action === 'email_sent') return 'accent';
+  if (action === 'note' || action === 'staff_note') return 'warn';
+  return '';
+}
+
+function renderPayment() {
+  var o = currentOrder;
+  var p = getPaymentStatus(o);
+  var paid = getOrderPaidAmount(o);
+  var txns = (o.transactions || []).slice();
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Payment</h3><span class="badge ' + paymentBadgeClass(p) + '">' + getPaymentLabel(p) + '</span></div><div class="dc-body">';
+  html += '<div class="summary-row"><span>Total</span><span>' + formatCurrency(o.total) + '</span></div>';
+  html += '<div class="summary-row"><span>Paid</span><span style="color:var(--success);font-weight:600;">' + formatCurrency(paid) + '</span></div>';
+  html += '<div class="summary-row"><span>Method</span><span>' + escapeHtml((o.paymentMethod || '-').toUpperCase()) + '</span></div>';
+  if (txns.length) {
+    html += '<div style="margin-top:12px;"><div style="font-size:11px;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;margin-bottom:4px;">Transactions</div>';
+    for (var i = 0; i < txns.length; i++) {
+      var t = txns[i];
+      html += '<div class="txn-row"><div><div class="txn-type">' + (t.type === 'refund' ? 'Refund' : t.type === 'capture' ? 'Payment captured' : 'Payment') + '</div><div class="txn-meta">' + formatDateTime(t.timestamp) + (t.note ? ' &middot; ' + escapeHtml(t.note) : '') + '</div></div><span class="txn-amount ' + (t.type === 'refund' ? 'minus' : 'plus') + '">' + (t.type === 'refund' ? '-' : '+') + formatCurrency(t.amount) + '</span></div>';
+    }
+    html += '</div>';
+  }
+  html += '</div><div class="dc-footer" style="display:flex;gap:8px;flex-wrap:wrap;">';
+  if (p !== 'paid' && p !== 'cancelled') html += '<button class="btn btn-sm btn-accent" onclick="markPaid()"><i class="fa-solid fa-money-check-dollar"></i> Mark as paid</button>';
+  if (p === 'paid' || p === 'partially_refunded') html += '<button class="btn btn-sm" onclick="openRefundModal()"><i class="fa-solid fa-money-bill-wave"></i> Refund</button>';
+  html += '</div></div>';
+  document.getElementById('detailSide').insertAdjacentHTML('beforeend', html);
+}
+
+function renderItems() {
+  var o = currentOrder;
+  var items = o.items || [];
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Items (' + items.length + ')</h3><button class="btn btn-sm" onclick="openEditOrder()"><i class="fa-solid fa-pen"></i> Edit</button></div><div class="dc-body">';
+  for (var i = 0; i < items.length; i++) {
+    var it = items[i];
+    html += '<div class="line-item"><div class="li-thumb">' + (it.image ? '<img src="' + escapeHtml(it.image) + '" onerror="this.style.display=\'none\';">' : '<i class="fa-solid fa-box"></i>') + '</div><div class="li-info"><div class="li-name">' + escapeHtml(it.name) + '</div><div class="li-meta">' + (it.sku ? 'SKU: ' + escapeHtml(it.sku) + ' &middot; ' : '') + 'Qty: ' + (it.qty || 1) + '</div></div><div class="li-price">' + formatCurrency((it.price || 0) * (it.qty || 1)) + '</div></div>';
+  }
+  html += '<div class="summary-row"><span>Subtotal</span><span>' + formatCurrency(o.subtotal || o.total) + '</span></div>';
+  if (o.discount && o.discount > 0) html += '<div class="summary-row"><span>Discount</span><span class="discount">-' + (o.discountType === 'percent' ? '(' + o.discountVal + '%) ' : '') + formatCurrency(o.discount) + '</span></div>';
+  html += '<div class="summary-row total"><span>Total</span><span>' + formatCurrency(o.total) + '</span></div>';
+  html += '</div></div>';
+  document.getElementById('detailSide').insertAdjacentHTML('beforeend', html);
+}
+
+function renderFulfillments() {
+  var o = currentOrder;
+  var fs = (o.fulfillments || []).slice();
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Fulfillment</h3><span class="badge ' + fulfillmentBadgeClass(getFulfillmentStatus(o)) + '">' + getFulfillmentLabel(getFulfillmentStatus(o)) + '</span></div><div class="dc-body">';
+  if (fs.length === 0) {
+    html += '<p class="text-muted" style="font-size:13px;">Not fulfilled yet.</p>';
+  } else {
+    for (var i = 0; i < fs.length; i++) {
+      var f = fs[i];
+      html += '<div class="fulfillment-block"><div class="fb-top"><span><i class="fa-solid fa-box-open"></i> ' + escapeHtml(f.carrier || 'Fulfillment') + '</span><span class="badge badge-fulfilled">Fulfilled</span></div><div class="fb-meta">' + (f.tracking ? 'Tracking: <strong>' + escapeHtml(f.tracking) + '</strong>' : 'No tracking') + '<br>' + formatDateTime(f.timestamp) + '</div></div>';
+    }
+  }
+  if (o.shiprocketId) html += '<div class="mt-8" style="font-size:12px;color:var(--text-muted);">Shiprocket order ID: <strong>' + escapeHtml(o.shiprocketId) + '</strong></div>';
+  html += '</div><div class="dc-footer"><button class="btn btn-sm" onclick="openTrackingModal()"><i class="fa-solid fa-box-open"></i> Add fulfillment</button></div></div>';
+  document.getElementById('detailSide').insertAdjacentHTML('beforeend', html);
+}
+
+function renderCustomer() {
+  var o = currentOrder;
+  var orders = getOrders().filter(function(x) { return x.phone === o.phone && x.id !== o.id; });
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Customer</h3></div><div class="dc-body">';
+  html += '<div style="display:flex;align-items:center;gap:12px;margin-bottom:10px;"><div class="avatar" style="width:44px;height:44px;border-radius:50%;background:var(--primary);color:#fff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:600;">' + escapeHtml((o.customerName || '?').charAt(0)) + '</div><div><div style="font-weight:600;font-size:14px;">' + escapeHtml(o.customerName) + '</div><div class="text-muted" style="font-size:12px;">' + (o.email ? escapeHtml(o.email) : 'No email') + ' &middot; ' + escapeHtml(o.phone || '-') + '</div></div></div>';
+  html += '<div class="summary-row"><span>Address</span></div><p style="font-size:13px;line-height:1.5;margin-top:2px;">' + escapeHtml(o.address || '-') + ', ' + escapeHtml(o.city || '') + (o.state ? ', ' + escapeHtml(o.state) : '') + ' - ' + escapeHtml(o.pincode || '') + (o.landmark ? '<br>Near ' + escapeHtml(o.landmark) : '') + '</p>';
+  html += '<div style="margin-top:12px;font-size:11px;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;">Past orders (' + orders.length + ')</div>';
+  if (orders.length === 0) {
+    html += '<p class="text-muted" style="font-size:12px;margin-top:4px;">No other orders from this customer.</p>';
+  } else {
+    for (var i = 0; i < orders.length && i < 5; i++) {
+      var po = orders[i];
+      html += '<div class="customer-row" onclick="window.location=\'orders-detail.html?id=' + encodeURIComponent(po.id) + '\'"><div class="cr-info"><div class="cr-name">' + escapeHtml(orderDisplayNo(po)) + '</div><div class="cr-meta">' + formatDate(po.createdAt) + ' &middot; ' + formatCurrency(po.total) + '</div></div><span class="badge ' + paymentBadgeClass(getPaymentStatus(po)) + '">' + getPaymentLabel(getPaymentStatus(po)) + '</span></div>';
+    }
+  }
+  html += '</div></div>';
+  document.getElementById('detailSide').insertAdjacentHTML('beforeend', html);
+}
+
+function renderAddress() {
+  var o = currentOrder;
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Shipping Address</h3></div><div class="dc-body">';
+  html += '<p style="font-size:13px;line-height:1.5;">' + escapeHtml(o.customerName) + '<br>' + escapeHtml(o.address || '-') + '<br>' + escapeHtml(o.city || '') + (o.state ? ', ' + escapeHtml(o.state) : '') + ' - ' + escapeHtml(o.pincode || '') + (o.landmark ? '<br>Near ' + escapeHtml(o.landmark) : '') + '<br>' + escapeHtml(o.phone || '') + '</p>';
+  html += '</div></div>';
+  document.getElementById('detailSide').insertAdjacentHTML('beforeend', html);
+}
+
+function renderSuggestion() {
+  var o = currentOrder;
+  var val = o.suggestion || '';
+  var html = '<div class="detail-card"><div class="dc-header"><h3>Suggestion</h3>' +
+    '<button class="btn btn-sm" onclick="editSuggestion()"><i class="fa-solid ' + (val ? 'fa-pen' : 'fa-plus') + '"></i> ' + (val ? 'Edit' : 'Add') + '</button></div>' +
+    '<div class="dc-body" id="suggestionBody">' +
+    (val ? '<p style="font-size:13px;line-height:1.5;white-space:pre-wrap;margin:0;">' + escapeHtml(val) + '</p>'
+          : '<p class="text-muted" style="font-size:13px;margin:0;">No suggestion yet.</p>') +
+    '</div></div>';
+  document.getElementById('detailSide').insertAdjacentHTML('beforeend', html);
+}
+
+function editSuggestion() {
+  var o = currentOrder;
+  var body = document.getElementById('suggestionBody');
+  if (!body) return;
+  body.innerHTML = '<div class="form-group" style="margin:0;"><textarea id="suggestionInput" style="width:100%;min-height:70px;padding:8px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--page-bg);color:var(--text);resize:vertical;box-sizing:border-box;outline:none;">' + escapeHtml(o.suggestion || '') + '</textarea></div>' +
+    '<div style="display:flex;gap:8px;margin-top:10px;"><button class="btn btn-sm btn-accent" onclick="saveSuggestion()"><i class="fa-solid fa-check"></i> Save</button><button class="btn btn-sm" onclick="cancelSuggestion()">Cancel</button></div>';
+  document.getElementById('suggestionInput').focus();
+}
+
+function saveSuggestion() {
+  var val = document.getElementById('suggestionInput').value.trim();
+  mutateOrder(function (o) {
+    o.suggestion = val;
+    addTimelineEvent(o, 'note', val ? 'Suggestion: ' + val : 'Suggestion removed');
+    logActivity('order_updated', 'Suggestion updated on order ' + o.id);
+  });
+  showToast(val ? 'Suggestion saved' : 'Suggestion removed', 'success');
+}
+
+function cancelSuggestion() {
+  renderSuggestionBody();
+}
+
+function renderSuggestionBody() {
+  var o = currentOrder;
+  var val = o.suggestion || '';
+  var body = document.getElementById('suggestionBody');
+  if (!body) return;
+  body.innerHTML = val ? '<p style="font-size:13px;line-height:1.5;white-space:pre-wrap;margin:0;">' + escapeHtml(val) + '</p>'
+                       : '<p class="text-muted" style="font-size:13px;margin:0;">No suggestion yet.</p>';
+}
+
+// ---- ACTIONS ----
+function mutateOrder(fn) {
+  var orders = getOrders();
+  var o = null;
+  for (var i = 0; i < orders.length; i++) {
+    if (orders[i].id === currentOrder.id) { o = orders[i]; break; }
+  }
+  if (!o) return;
+  fn(o);
+  o.updatedAt = new Date().toISOString();
+  saveOrders(orders);
+  currentOrder = o;
+  document.getElementById('detailMain').innerHTML = '';
+  document.getElementById('detailSide').innerHTML = '';
+  renderHeader();
+  renderProgress();
+  renderTimeline();
+  renderSuggestion();
+  renderPayment();
+  renderItems();
+  renderFulfillments();
+  renderCustomer();
+  renderAddress();
+}
+
+function markPaid() {
+  var o = currentOrder;
+  if (getPaymentStatus(o) === 'cancelled') return;
+  mutateOrder(function (x) {
+    x.paymentStatus = 'paid';
+    x.paidAt = new Date().toISOString();
+    addOrderTransaction(x, 'payment', x.total, 'Marked as paid manually');
+    addTimelineEvent(x, 'payment_marked', 'Payment of ' + formatCurrency(x.total) + ' marked as paid');
+    logActivity('order_status', 'Order ' + x.id + ' marked as paid');
+  });
+  showToast('Order marked as paid', 'success');
+  if (currentOrder.email) sendOrderNotification(currentOrder, 'order_paid');
+}
+
+function openTrackingModal() {
+  document.getElementById('trackNumber').value = '';
+  openModal('trackingModal');
+}
+
+function confirmTracking() {
+  var carrier = document.getElementById('trackCarrier').value;
+  var tracking = document.getElementById('trackNumber').value.trim();
+  if (!tracking) { showToast('Tracking number required', 'error'); return; }
+  mutateOrder(function (o) {
+    o.fulfillmentStatus = 'fulfilled';
+    o.fulfilledAt = new Date().toISOString();
+    addOrderFulfillment(o, carrier, tracking);
+    addTimelineEvent(o, 'fulfilled', 'Order fulfilled via ' + carrier + ' (Tracking: ' + tracking + ')');
+    addTimelineEvent(o, 'tracking_added', 'Tracking number ' + tracking + ' (' + carrier + ')');
+    logActivity('order_status', 'Order ' + o.id + ' fulfilled with tracking ' + tracking);
+  });
+  closeModal('trackingModal');
+  showToast('Order fulfilled', 'success');
+  if (currentOrder.email) sendOrderNotification(currentOrder, 'order_fulfilled');
+}
+
+function markDelivered() {
+  mutateOrder(function (o) {
+    o.deliveredAt = new Date().toISOString();
+    o.status = 'delivered';
+    o.fulfillmentStatus = 'fulfilled';
+    o.paymentStatus = o.paymentStatus === 'unpaid' ? 'paid' : o.paymentStatus;
+    addTimelineEvent(o, 'delivered', 'Order marked as delivered');
+    logActivity('order_status', 'Order ' + o.id + ' marked as delivered');
+  });
+  showToast('Order delivered', 'success');
+}
+
+function openRefundModal() {
+  var o = currentOrder;
+  var paid = getOrderPaidAmount(o);
+  document.getElementById('refundAmount').value = paid > 0 ? paid : o.total;
+  document.getElementById('refundNote').value = '';
+  openModal('refundModal');
+}
+
+function confirmRefund() {
+  var amount = parseFloat(document.getElementById('refundAmount').value) || 0;
+  var note = document.getElementById('refundNote').value.trim();
+  if (amount <= 0 || amount > currentOrder.total) { showToast('Enter a valid refund amount', 'error'); return; }
+  mutateOrder(function (o) {
+    addOrderTransaction(o, 'refund', amount, note);
+    if (amount >= o.total) { o.paymentStatus = 'refunded'; addTimelineEvent(o, 'refund', 'Full refund of ' + formatCurrency(amount) + ' issued'); }
+    else { o.paymentStatus = 'partially_refunded'; addTimelineEvent(o, 'refund', 'Partial refund of ' + formatCurrency(amount) + ' issued'); }
+    logActivity('order_status', 'Refund of ' + amount + ' issued on order ' + o.id);
+  });
+  closeModal('refundModal');
+  showToast('Refund recorded', 'success');
+  if (currentOrder.email) sendOrderNotification(currentOrder, 'order_refunded');
+}
+
+function openCancelOrder() {
+  openModal('cancelOrderModal');
+}
+
+function confirmCancelOrder() {
+  var reason = document.getElementById('cancelReason').value;
+  mutateOrder(function (o) {
+    o.status = 'cancelled';
+    o.paymentStatus = 'cancelled';
+    o.fulfillmentStatus = 'cancelled';
+    o.cancelledReason = reason;
+    o.cancelledAt = new Date().toISOString();
+    addTimelineEvent(o, 'cancelled', 'Order cancelled — ' + reason.replace(/_/g, ' '));
+    logActivity('order_status', 'Order ' + o.id + ' cancelled (' + reason + ')');
+  });
+  closeModal('cancelOrderModal');
+  showToast('Order cancelled', 'success');
+  if (currentOrder.email) sendOrderNotification(currentOrder, 'order_cancelled');
+}
+
+function duplicateOrder() {
+  var cur = getCurrentUser();
+  if (cur && cur.role === 'agent' && !hasRight(cur, 'create_orders')) {
+    showToast('You do not have permission to create orders', 'error');
+    return;
+  }
+  duplicateMode = true;
+  document.getElementById('editOrderTitle').textContent = 'Duplicate Order';
+  document.getElementById('editOrderSaveBtn').innerHTML = '<i class="fa-solid fa-copy"></i> Create Copy';
+  populateEditForm(currentOrder);
+  openModal('editOrderModal');
+}
+
+// ---- DUPLICATE ITEMS ----
+function getProductOptions(selectedId) {
+  var products = getData('products') || [];
+  var html = '<option value="">Select Product</option>';
+  products.forEach(function (p) {
+    var stock = (p.stock === undefined || p.stock === null) ? 0 : p.stock;
+    html += '<option value="' + p.id + '"' + (p.id === selectedId ? ' selected' : '') + '>' + p.name + ' (' + stock + ' in stock)</option>';
+  });
+  return html;
+}
+
+function addEditItem(item) {
+  item = item || {};
+  var container = document.getElementById('editItemsContainer');
+  var row = document.createElement('div');
+  row.className = 'order-item-row';
+  var sel = document.createElement('select');
+  sel.innerHTML = getProductOptions(item.productId || '');
+  sel.onchange = function () { updateEditPrice(this); };
+  var qty = document.createElement('input');
+  qty.type = 'number';
+  qty.min = '1';
+  qty.value = item.qty || 1;
+  qty.placeholder = 'Qty';
+  qty.oninput = calcEditTotal;
+  var price = document.createElement('input');
+  price.type = 'number';
+  price.min = '0';
+  price.className = 'editPrice';
+  price.value = (item.price !== undefined && item.price !== null) ? item.price : '';
+  price.placeholder = 'Price';
+  price.oninput = function () { this.setAttribute('data-touched', '1'); calcEditTotal(); };
+  var del = document.createElement('button');
+  del.type = 'button';
+  del.className = 'btn btn-sm';
+  del.innerHTML = '<i class="fa-solid fa-trash"></i>';
+  del.onclick = function () { removeEditItem(this); };
+  row.appendChild(sel);
+  row.appendChild(qty);
+  row.appendChild(price);
+  row.appendChild(del);
+  container.appendChild(row);
+  if (item.productId) updateEditPrice(sel);
+  calcEditTotal();
+}
+
+function removeEditItem(btn) {
+  var row = btn.closest('.order-item-row');
+  if (row) row.parentNode.removeChild(row);
+  calcEditTotal();
+}
+
+function updateEditPrice(sel) {
+  var row = sel.closest('.order-item-row');
+  var products = getData('products') || [];
+  var prod = products.find(function (p) { return p.id === sel.value; });
+  if (row) {
+    var priceInput = row.querySelector('.editPrice');
+    if (prod && (priceInput.value === '' || !priceInput.getAttribute('data-touched'))) {
+      priceInput.value = (prod.price !== undefined && prod.price !== null) ? prod.price : '';
+    }
+  }
+  calcEditTotal();
+}
+
+function calcEditTotal() {
+  var rows = document.querySelectorAll('#editItemsContainer .order-item-row');
+  var subtotal = 0;
+  rows.forEach(function (row) {
+    var price = parseFloat(row.querySelector('.editPrice').value) || 0;
+    var qty = parseInt(row.querySelector('input[type="number"]').value) || 0;
+    subtotal += price * qty;
+  });
+  var disc = parseFloat(document.getElementById('editDiscount').value) || 0;
+  var discType = document.getElementById('editDiscountType').value;
+  var discVal = discType === 'percent' ? subtotal * (disc / 100) : disc;
+  if (discVal > subtotal) discVal = subtotal;
+  var total = subtotal - discVal;
+  document.getElementById('editSubtotal').textContent = 'Rs. ' + subtotal.toFixed(2);
+  document.getElementById('editDiscountDisplay').textContent = '- Rs. ' + discVal.toFixed(2);
+  document.getElementById('editTotal').textContent = 'Rs. ' + total.toFixed(2);
+}
+
+function toggleArchive() {
+  mutateOrder(function (o) {
+    o.archived = !o.archived;
+    addTimelineEvent(o, o.archived ? 'archived' : 'restored', o.archived ? 'Order archived' : 'Order restored');
+  });
+  showToast(currentOrder.archived ? 'Order archived' : 'Order restored', 'success');
+}
+
+// ---- EDIT ----
+function populateEditForm(src) {
+  document.getElementById('editOrderId').value = src.id;
+  document.getElementById('editName').value = src.customerName || '';
+  document.getElementById('editPhone').value = src.phone || '';
+  document.getElementById('editEmail').value = src.email || '';
+  document.getElementById('editTags').value = getOrderTags(src).join(', ');
+  document.getElementById('editAddress').value = src.address || '';
+  document.getElementById('editLandmark').value = src.landmark || '';
+  document.getElementById('editCity').value = src.city || '';
+  document.getElementById('editState').value = src.state || '';
+  document.getElementById('editPincode').value = src.pincode || '';
+  document.getElementById('editRisk').value = src.riskLevel || 'low';
+  document.getElementById('editInternalNote').value = src.internalNote || '';
+
+  var itemsSection = document.getElementById('editOrderItemsSection');
+  if (duplicateMode) {
+    var items = (src.items && src.items.length) ? src.items : [{ productId: '', qty: 1, price: '' }];
+    document.getElementById('editItemsContainer').innerHTML = '';
+    items.forEach(function (it) { addEditItem(it); });
+    var pm = src.paymentMethod || 'cod';
+    var pmRadio = document.querySelector('input[name="editPayment"][value="' + pm + '"]');
+    if (pmRadio) pmRadio.checked = true;
+    document.getElementById('editDiscountType').value = src.discountType || 'percent';
+    document.getElementById('editDiscount').value = (src.discount !== undefined && src.discount !== null) ? src.discount : 0;
+    itemsSection.style.display = 'block';
+  } else {
+    itemsSection.style.display = 'none';
+  }
+}
+
+function openEditOrder() {
+  duplicateMode = false;
+  document.getElementById('editOrderTitle').textContent = 'Edit Order';
+  document.getElementById('editOrderSaveBtn').innerHTML = '<i class="fa-solid fa-check"></i> Save';
+  populateEditForm(currentOrder);
+  openModal('editOrderModal');
+}
+
+function saveEditedOrder() {
+  var cur = getCurrentUser();
+  var vals = {
+    customerName: document.getElementById('editName').value.trim(),
+    phone: document.getElementById('editPhone').value.trim(),
+    email: document.getElementById('editEmail').value.trim(),
+    address: document.getElementById('editAddress').value.trim(),
+    landmark: document.getElementById('editLandmark').value.trim(),
+    city: document.getElementById('editCity').value.trim(),
+    state: document.getElementById('editState').value.trim(),
+    pincode: document.getElementById('editPincode').value.trim(),
+    riskLevel: document.getElementById('editRisk').value,
+    internalNote: document.getElementById('editInternalNote').value.trim(),
+    tags: document.getElementById('editTags').value.split(',').map(function(t){ return t.trim(); }).filter(Boolean)
+  };
+
+  if (vals.phone && String(vals.phone).replace(/\D/g, '').length !== 10) {
+    showToast('Please enter a valid 10-digit phone number', 'error');
+    return;
+  }
+
+  if (duplicateMode) {
+    var o = currentOrder;
+    var copy = JSON.parse(JSON.stringify(o));
+    copy.id = generateId();
+    copy.orderNumber = nextOrderNumber();
+    copy.createdAt = new Date().toISOString();
+    copy.status = 'pending';
+    copy.paymentStatus = 'unpaid';
+    copy.fulfillmentStatus = 'unfulfilled';
+    copy.duplicatedFrom = o.id;
+    copy.duplicatedAt = new Date().toISOString();
+    copy.shiprocketId = null;
+    copy.transactions = [];
+    copy.fulfillments = [];
+    copy.customerName = vals.customerName;
+    copy.phone = vals.phone;
+    copy.email = vals.email;
+    copy.address = vals.address;
+    copy.landmark = vals.landmark;
+    copy.city = vals.city;
+    copy.state = vals.state;
+    copy.pincode = vals.pincode;
+    copy.riskLevel = vals.riskLevel;
+    copy.internalNote = vals.internalNote;
+    copy.tags = vals.tags;
+    copy.paymentMethod = document.querySelector('input[name="editPayment"]:checked') ? document.querySelector('input[name="editPayment"]:checked').value : (o.paymentMethod || 'cod');
+    copy.discountType = document.getElementById('editDiscountType').value;
+    copy.discount = parseFloat(document.getElementById('editDiscount').value) || 0;
+
+    var newItems = [];
+    var allProds = getData('products') || [];
+    document.querySelectorAll('#editItemsContainer .order-item-row').forEach(function (row) {
+      var sel = row.querySelector('select');
+      var priceInput = row.querySelector('.editPrice');
+      var qtyInput = row.querySelector('input[type="number"]');
+      var productId = sel.value;
+      var qty = parseInt(qtyInput.value) || 0;
+      var price = parseFloat(priceInput.value) || 0;
+      if (!productId) return;
+      var prod = allProds.find(function (x) { return x.id === productId; });
+      newItems.push({
+        productId: productId,
+        name: (prod ? prod.name : productId),
+        qty: qty,
+        price: price,
+        total: price * qty
+      });
+    });
+
+    if (newItems.length === 0) {
+      showToast('At least one product is required', 'error');
+      return;
+    }
+
+    var subtotal = 0;
+    newItems.forEach(function (it) { subtotal += it.total; });
+    var discVal = copy.discountType === 'percent' ? subtotal * (copy.discount / 100) : copy.discount;
+    if (discVal > subtotal) discVal = subtotal;
+    copy.items = newItems;
+    copy.subtotal = subtotal;
+    copy.total = subtotal - discVal;
+    copy.timeline = [{ id: newEventId(), action: 'created', details: 'Order ' + copy.id + ' created (duplicate of ' + o.id + ')', user: (cur || {}).name || 'System', timestamp: copy.createdAt }];
+    addTimelineEvent(copy, 'duplicate', 'Duplicated from order ' + o.id);
+
+    if (cur && cur.role === 'agent' && !hasRight(cur, 'create_orders')) {
+      showToast('You do not have permission to create orders', 'error');
+      return;
+    }
+
+    if (cur && (cur.role === 'agent' || cur.role === 'manager')) {
+      var lowStock = [];
+      (copy.items || []).forEach(function(it) {
+        var prod = allProds.find(function(x) { return x.id === it.productId; });
+        if (!prod || (prod.stock === undefined ? 0 : prod.stock) < 50) lowStock.push(it.name || it.productId);
+      });
+      if (lowStock.length > 0) {
+        if (cur.role === 'agent') {
+          duplicateMode = false;
+          closeModal('editOrderModal');
+          showToast('Order cannot be placed due to low stock: ' + lowStock.join(', '), 'error');
+          return;
+        }
+        if (!confirm('Low stock: ' + lowStock.join(', ') + '. Do you still want to create this duplicate order?')) {
+          duplicateMode = false;
+          closeModal('editOrderModal');
+          return;
+        }
+        showToast('Warning: low stock on ' + lowStock.join(', ') + ' — order created (manager override)', 'warning');
+      }
+    }
+
+    var orders = getOrders();
+    orders.unshift(copy);
+    saveOrders(orders);
+    duplicateMode = false;
+    closeModal('editOrderModal');
+    logActivity('order_created', 'Duplicated order ' + copy.id + ' from ' + o.id);
+    showToast('Order duplicated: ' + copy.id, 'success');
+    window.location.href = 'orders-detail.html?id=' + encodeURIComponent(copy.id);
+    return;
+  }
+
+  mutateOrder(function (o) {
+    o.customerName = vals.customerName;
+    o.phone = vals.phone;
+    o.email = vals.email;
+    o.address = vals.address;
+    o.landmark = vals.landmark;
+    o.city = vals.city;
+    o.state = vals.state;
+    o.pincode = vals.pincode;
+    o.riskLevel = vals.riskLevel;
+    o.internalNote = vals.internalNote;
+    o.tags = vals.tags;
+    addTimelineEvent(o, 'edited', 'Order details edited by ' + ((cur || {}).name || 'System'));
+    logActivity('order_updated', 'Order ' + o.id + ' edited');
+  });
+  closeModal('editOrderModal');
+  showToast('Order updated', 'success');
+}
+
+// ---- TAGS ----
+function openTagModal() {
+  document.getElementById('addTagInput').value = '';
+  openModal('tagModal');
+}
+
+function confirmAddTags() {
+  var vals = document.getElementById('addTagInput').value.split(',').map(function(t){ return t.trim(); }).filter(Boolean);
+  if (!vals.length) { showToast('Enter at least one tag', 'error'); return; }
+  mutateOrder(function (o) {
+    for (var i = 0; i < vals.length; i++) addOrderTag(o, vals[i]);
+    addTimelineEvent(o, 'edited', 'Tags added: ' + vals.join(', '));
+  });
+  closeModal('tagModal');
+  showToast('Tags added', 'success');
+}
+
+function removeOrderTagById(id, tag) {
+  var orders = getOrders();
+  var o = null;
+  for (var i = 0; i < orders.length; i++) if (orders[i].id === id) { o = orders[i]; break; }
+  if (!o) return;
+  removeOrderTag(o, tag);
+  saveOrders(orders);
+  currentOrder = o;
+  document.getElementById('detailMain').innerHTML = '';
+  document.getElementById('detailSide').innerHTML = '';
+  renderHeader();
+  renderProgress();
+  renderTimeline();
+  renderPayment();
+  renderItems();
+  renderFulfillments();
+  renderCustomer();
+  renderAddress();
+}
+
+// ---- NOTES ----
+function addNote(isStaff) {
+  var val = document.getElementById(isStaff ? 'staffNoteInput' : 'noteInput').value.trim();
+  if (!val) { showToast('Note cannot be empty', 'error'); return; }
+  mutateOrder(function (o) {
+    addTimelineEvent(o, isStaff ? 'staff_note' : 'note', val + (isStaff ? ' (staff)' : ''));
+    if (isStaff) o.internalNote = o.internalNote ? o.internalNote + '\n' + val : val;
+  });
+  showToast('Note added', 'success');
+}
+
+// ---- DELETE ----
+function openDeleteModal() {
+  if (!canDelete()) { showToast('Access denied', 'error'); return; }
+  openModal('deleteModal');
+}
+
+function confirmDeleteOrder() {
+  if (!canDelete()) { showToast('Access denied', 'error'); return; }
+  var id = currentOrder.id;
+  var orders = getOrders().filter(function(o){ return o.id !== id; });
+  saveOrders(orders);
+  closeModal('deleteModal');
+  showToast('Order deleted', 'success');
+  window.location.href = 'orders.html';
+}
+</script>
+</body>
+</html>

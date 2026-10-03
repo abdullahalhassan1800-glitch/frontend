@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "240860485188",
+    "project_id": "cms-apk",
+    "storage_bucket": "cms-apk.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:240860485188:android:01d975009d79252e3fce11",
+        "android_client_info": {
+          "package_name": "com.taiva.cms"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBZCqOx2MROm5NuweRlATPM6-Imjh5Wd_8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

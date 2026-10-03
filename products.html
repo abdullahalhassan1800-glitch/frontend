@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>All Products — OMS Admin</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css?v=10">
+</head>
+<body>
+
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header">
+      <img src="assets/logo.png?v=2" alt="OMS" style="height:32px;width:auto;flex-shrink:0;">
+      <span class="logo-text">OMS</span>
+    </div>
+    <nav class="sidebar-nav">
+      <div class="nav-section">Main</div>
+      <a href="dashboard.html" class="nav-item"><span class="nav-icon"><i class="fa-solid fa-house"></i></span><span class="nav-label">Home</span></a>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-box"></i></span><span class="nav-label">Orders</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span><span class="nav-badge" id="orderBadge">0</span></a>
+      <div class="nav-sub"><a href="orders.html" class="nav-item">All orders</a><a href="orders-draft.html" class="nav-item">Drafts</a><a href="orders-abandoned.html" class="nav-item">Abandoned checkouts</a></div>
+      <a href="#" class="nav-item has-submenu active"><span class="nav-icon"><i class="fa-solid fa-tag"></i></span><span class="nav-label">Products</span><span class="nav-arrow open"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub open">
+        <a href="products.html" class="nav-item active">All products</a>
+        <a href="products-collections.html" class="nav-item">Collections</a>
+        <a href="products-inventory.html" class="nav-item">Inventory</a>
+        <a href="products-purchase-orders.html" class="nav-item">Purchase orders</a>
+        <a href="products-transfers.html" class="nav-item">Transfers</a>
+        <a href="products-gift-cards.html" class="nav-item">Gift cards</a>
+      </div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-users"></i></span><span class="nav-label">Customers</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="customers.html" class="nav-item">All customers</a><a href="customers-segments.html" class="nav-item">Segments</a><a href="customers-companies.html" class="nav-item">Companies</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-chart-line"></i></span><span class="nav-label">Growth</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="growth-attribution.html" class="nav-item">Attribution</a><a href="growth-campaigns.html" class="nav-item">Campaigns</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-file-lines"></i></span><span class="nav-label">Content</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="content-metaobjects.html" class="nav-item">Metaobjects</a><a href="content-files.html" class="nav-item">Files</a><a href="content-menus.html" class="nav-item">Menus</a><a href="content-blog.html" class="nav-item">Blog posts</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-globe"></i></span><span class="nav-label">Markets</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="markets-catalogs.html" class="nav-item">Catalogs</a><a href="markets-rollouts.html" class="nav-item">Rollouts</a></div>
+      <a href="#" class="nav-item has-submenu"><span class="nav-icon"><i class="fa-solid fa-chart-pie"></i></span><span class="nav-label">Analytics</span><span class="nav-arrow"><i class="fa-solid fa-chevron-right"></i></span></a>
+      <div class="nav-sub"><a href="analytics-reports.html" class="nav-item">Reports</a><a href="analytics-liveview.html" class="nav-item">Live View</a></div>
+      <div class="nav-section nav-role-manager">Agents</div>
+      <a href="agents-activity.html" class="nav-item nav-role-manager"><span class="nav-icon"><i class="fa-solid fa-user-tie"></i></span><span class="nav-label">Agent Activity</span></a>
+      <div class="nav-section">Settings</div>
+      <a href="users.html" class="nav-item nav-role-manager"><span class="nav-icon"><i class="fa-solid fa-user-gear"></i></span><span class="nav-label">Users</span></a>
+      <a href="settings.html" class="nav-item nav-role-restricted"><span class="nav-icon"><i class="fa-solid fa-gear"></i></span><span class="nav-label">Settings</span></a>
+      <a href="logs.html" class="nav-item nav-role-restricted"><span class="nav-icon"><i class="fa-solid fa-clock-rotate-left"></i></span><span class="nav-label">Logs</span></a>
+      <a href="#" class="nav-item" onclick="logout()"><span class="nav-icon"><i class="fa-solid fa-right-from-bracket"></i></span><span class="nav-label">Logout</span></a>
+    </nav>
+    <div class="sidebar-footer">Dev By Abdullah Al Hassan</div>
+  </div>
+
+  <div class="main-content">
+    <header class="topbar">
+      <button class="sidebar-toggle" id="sidebarToggle"><i class="fa-solid fa-bars"></i></button>
+      <button class="sidebar-toggle" id="mobileToggle" style="display:none"><i class="fa-solid fa-bars"></i></button>
+      <div class="topbar-search"><i class="fa-solid fa-search"></i><input type="text" placeholder="Search..." id="globalSearch"></div>
+      <div class="topbar-actions">
+        <button id="themeToggle"><i class="fa-solid fa-moon"></i></button>
+        <button><i class="fa-regular fa-bell"></i><span class="notification-dot"></span></button>
+        <div class="admin-avatar" id="adminAvatar" onclick="toggleProfileMenu(event)"><span id="avatarInitial">A</span></div>
+      <p style="font-size:11px;margin:4px 0;color:var(--text-muted);">Design and Developed by Abdullah Al Hassan</p>
+      </div>
+    </header>
+
+    <div class="page-content">
+      <div style="background:#fff3cd;border:1px solid #ffc107;border-radius:8px;padding:10px 16px;margin-bottom:16px;display:flex;align-items:center;gap:10px;font-size:13px;color:#856404;">
+        <i class="fa-solid fa-circle-info" style="font-size:16px;"></i>
+        Note: Payment gateway not configured. Orders are processed as Cash on Delivery.
+      </div>
+      <div class="page-header">
+        <div>
+          <h1>Products</h1>
+          <div class="page-subtitle">Manage your product catalog</div>
+        </div>
+        <div class="page-actions">
+          <div class="view-toggle" id="viewToggle">
+            <button class="active" data-view="grid" title="Grid view"><i class="fa-solid fa-grip"></i></button>
+            <button data-view="table" title="Table view"><i class="fa-solid fa-list"></i></button>
+          </div>
+          <button class="btn btn-sm viewer-hide" onclick="generateProductPages()" title="Generate static product pages"><i class="fa-solid fa-code"></i> Gen Pages</button>
+          <button class="btn btn-accent viewer-hide" onclick="openModal('addProductModal')"><i class="fa-solid fa-plus"></i> Add product</button>
+        </div>
+      </div>
+
+      <div class="filter-bar">
+        <input type="text" id="productSearch" placeholder="Search by name..." style="min-width:200px;">
+        <select id="categoryFilter"><option value="">All categories</option></select>
+        <span class="filter-count" id="productCount"></span>
+      </div>
+
+      <div class="view-container grid-view" id="productContainer">
+        <div class="products-grid-view" id="productGridView"></div>
+        <div class="table-container table-view-default" id="productTableView" style="display:none;">
+          <table>
+            <thead><tr><th>Image</th><th>Name</th><th>SKU</th><th>Category</th><th>Price</th><th>Stock</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody id="productTableBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div id="productsPagination"></div>
+    </div>
+  </div>
+
+  <div class="modal-overlay" id="modalOverlay" onclick="closeAllModals()"></div>
+
+  <div class="modal" id="addProductModal">
+    <div class="modal-header"><h2 id="productModalTitle">Add product</h2><button class="modal-close" onclick="closeModal('addProductModal')">&times;</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="editProductId">
+      <div class="form-group"><label>Product name</label><input type="text" id="prodName" placeholder="Enter product name"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Price (Rs.)</label><input type="number" id="prodPrice" placeholder="0"></div>
+        <div class="form-group"><label>Original price (Rs.)</label><input type="number" id="prodOrigPrice" placeholder="0"></div>
+      </div>
+      <div class="form-row">
+        <div class="form-group"><label>Category</label><select id="prodCategory"><option value="">Select category</option><option>Sugar Control</option><option>Digestive</option><option>Joint Care</option><option>General</option></select></div>
+        <div class="form-group"><label>Stock</label><input type="number" id="prodStock" placeholder="0"></div>
+      </div>
+      <div class="form-group">
+        <label>Product Image</label>
+        <div class="image-upload-section">
+          <div class="image-tabs">
+            <button class="image-tab active" data-tab="url" onclick="switchImageTab('url')"><i class="fa-solid fa-link"></i> URL</button>
+            <button class="image-tab" data-tab="upload" onclick="switchImageTab('upload')"><i class="fa-solid fa-upload"></i> Upload</button>
+          </div>
+          <div class="image-tab-content active" id="imageUrlTab">
+            <input type="text" id="prodImage" placeholder="https://example.com/image.jpg" oninput="previewImageUrl(this.value)">
+          </div>
+          <div class="image-tab-content" id="imageUploadTab">
+            <div class="upload-zone" id="uploadZone" onclick="document.getElementById('prodImageFile').click()" ondragover="event.preventDefault(); this.classList.add('dragover')" ondragleave="this.classList.remove('dragover')" ondrop="handleImageDrop(event)">
+              <i class="fa-solid fa-cloud-arrow-up"></i>
+              <p>Click or drag image here</p>
+              <span>JPG, PNG, GIF - Max 5MB</span>
+            </div>
+            <input type="file" id="prodImageFile" accept="image/*" style="display:none" onchange="handleImageUpload(this)">
+          </div>
+          <div class="image-preview" id="imagePreview" style="display:none">
+            <img id="previewImg" src="" alt="Preview">
+            <button class="remove-preview" onclick="removeImagePreview()"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        </div>
+      </div>
+      <div class="form-group"><label>SKU</label><input type="text" id="prodSku" readonly><div class="form-hint">Auto-generated</div></div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('addProductModal')">Cancel</button>
+      <button class="btn btn-accent" onclick="saveProduct()"><i class="fa-solid fa-floppy-disk"></i> Save</button>
+    </div>
+  </div>
+
+  <div class="modal" id="deleteProductModal">
+    <div class="modal-header"><h2>Delete product</h2><button class="modal-close" onclick="closeModal('deleteProductModal')">&times;</button></div>
+    <div class="modal-body">
+      <p>Are you sure you want to delete <strong id="deleteProdName"></strong>?</p>
+      <input type="hidden" id="deleteProdId">
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('deleteProductModal')">Cancel</button>
+      <button class="btn btn-danger" onclick="confirmDeleteProduct()"><i class="fa-solid fa-trash"></i> Delete</button>
+    </div>
+  </div>
+
+  <div class="modal" id="publishToWebModal" style="max-width:600px;">
+    <div class="modal-header"><h2><i class="fa-solid fa-globe"></i> Publish to Website</h2><button class="modal-close" onclick="closeModal('publishToWebModal')">&times;</button></div>
+    <div class="modal-body">
+      <input type="hidden" id="webProductId">
+      <input type="hidden" id="webProdExistingId">
+      <div class="form-group"><label>Product Name</label><input type="text" id="webProdName" placeholder="Product name"></div>
+      <div class="form-row">
+        <div class="form-group"><label>Selling Price (Rs.)</label><input type="number" id="webProdPrice" placeholder="0"></div>
+        <div class="form-group"><label>Original Price (Rs.)</label><input type="number" id="webProdOrigPrice" placeholder="0"></div>
+      </div>
+      <div class="form-group">
+        <label>Category</label>
+        <select id="webProdCategory">
+          <option value="">Select category</option>
+          <option value="Blood Sugar">Blood Sugar</option>
+          <option value="Digestive Health">Digestive Health</option>
+          <option value="Joint Care">Joint Care</option>
+          <option value="Immunity">Immunity</option>
+          <option value="Skin Care">Skin Care</option>
+          <option value="Heart Health">Heart Health</option>
+          <option value="Weight Management">Weight Management</option>
+          <option value="General Wellness">General Wellness</option>
+          <option value="custom">+ Add Custom Category</option>
+        </select>
+      </div>
+      <div class="form-group" id="webProdCustomCatGroup" style="display:none;"><label>Custom Category</label><input type="text" id="webProdCustomCat" placeholder="Enter category name"></div>
+      <div class="form-group"><label>Short Tagline</label><input type="text" id="webProdTagline" placeholder="e.g. Natural Blood Sugar Support"></div>
+      <div class="form-group"><label>Description</label><textarea id="webProdDesc" rows="3" placeholder="Product description for website..."></textarea></div>
+      <div class="form-group"><label>Benefits (one per line)</label><textarea id="webProdBenefits" rows="3" placeholder="Balances Sugar Levels&#10;Reduces Cravings&#10;Improves Heart Health"></textarea></div>
+      <div class="form-row">
+        <div class="form-group"><label>Rating (1-5)</label><input type="number" id="webProdRating" min="1" max="5" step="0.1" placeholder="4.8"></div>
+        <div class="form-group"><label>Review Count</label><input type="number" id="webProdReviews" min="0" placeholder="284"></div>
+      </div>
+      <div class="form-group">
+        <label>Product Images (Gallery)</label>
+        <div id="webImageList"></div>
+        <div style="display:flex;gap:8px;margin-top:8px;">
+          <button type="button" class="btn btn-sm" onclick="addWebImageRow('')"><i class="fa-solid fa-link"></i> Add URL</button>
+          <button type="button" class="btn btn-sm" onclick="document.getElementById('webImageFileUpload').click()"><i class="fa-solid fa-upload"></i> Upload Image</button>
+          <input type="file" id="webImageFileUpload" accept="image/*" style="display:none" onchange="handleWebImageUpload(this)">
+        </div>
+      </div>
+      <div class="form-group">
+        <label>Status</label>
+        <label class="toggle-label" style="display:flex;align-items:center;gap:10px;cursor:pointer;">
+          <input type="checkbox" id="webProdActive" checked style="width:18px;height:18px;">
+          <span>Active (visible on website)</span>
+        </label>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn" onclick="closeModal('publishToWebModal')">Cancel</button>
+      <button class="btn btn-accent" onclick="publishToWeb()"><i class="fa-solid fa-globe"></i> Publish to Web</button>
+    </div>
+  </div>
+
+  <script src="app.js?v=13"></script>
+  <script>
+  function switchImageTab(tab) {
+    document.querySelectorAll('.image-tab').forEach(function(t) { t.classList.remove('active'); });
+    document.querySelector('.image-tab[data-tab="'+tab+'"]').classList.add('active');
+    document.querySelectorAll('.image-tab-content').forEach(function(c) { c.classList.remove('active'); });
+    document.getElementById(tab === 'url' ? 'imageUrlTab' : 'imageUploadTab').classList.add('active');
+  }
+
+  function previewImageUrl(url) {
+    var preview = document.getElementById('imagePreview');
+    var img = document.getElementById('previewImg');
+    if (url && url.trim()) {
+      img.src = url;
+      img.onload = function() { preview.style.display = 'inline-block'; };
+      img.onerror = function() { preview.style.display = 'none'; };
+    } else {
+      preview.style.display = 'none';
+    }
+  }
+
+  function handleImageUpload(input) {
+    var file = input.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('Max 5MB allowed', 'error'); return; }
+    if (!file.type.startsWith('image/')) { showToast('Only images allowed', 'error'); return; }
+    var reader = new FileReader();
+    reader.onload = function(e) {
+      document.getElementById('prodImage').value = e.target.result;
+      document.getElementById('previewImg').src = e.target.result;
+      document.getElementById('imagePreview').style.display = 'inline-block';
+    };
+    reader.readAsDataURL(file);
+  }
+
+  function handleImageDrop(e) {
+    e.preventDefault();
+    e.currentTarget.classList.remove('dragover');
+    var file = e.dataTransfer.files[0];
+    if (file) {
+      var dt = new DataTransfer();
+      dt.items.add(file);
+      document.getElementById('prodImageFile').files = dt.files;
+      handleImageUpload(document.getElementById('prodImageFile'));
+    }
+  }
+
+  function removeImagePreview() {
+    document.getElementById('prodImage').value = '';
+    document.getElementById('previewImg').src = '';
+    document.getElementById('imagePreview').style.display = 'none';
+    document.getElementById('prodImageFile').value = '';
+  }
+
+  initPage = function() {
+    loadCategoryFilter();
+    loadProducts();
+    document.getElementById('productSearch').addEventListener('input', loadProducts);
+    document.getElementById('categoryFilter').addEventListener('change', loadProducts);
+
+    var cur = getCurrentUser();
+    if (cur && cur.role === 'viewer') {
+      document.querySelectorAll('.viewer-hide').forEach(function(el) { el.style.display = 'none'; });
+    }
+
+    document.getElementById('viewToggle').querySelectorAll('button').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.getElementById('viewToggle').querySelectorAll('button').forEach(function(b) { b.classList.remove('active'); });
+        this.classList.add('active');
+        var view = this.getAttribute('data-view');
+        var container = document.getElementById('productContainer');
+        if (view === 'grid') {
+          container.classList.remove('table-view');
+          container.classList.add('grid-view');
+          document.getElementById('productGridView').style.display = '';
+          document.getElementById('productTableView').style.display = 'none';
+        } else {
+          container.classList.remove('grid-view');
+          container.classList.add('table-view');
+          document.getElementById('productGridView').style.display = 'none';
+          document.getElementById('productTableView').style.display = '';
+        }
+        loadProducts();
+      });
+    });
+  }
+
+  function loadCategoryFilter() {
+    var products = getData('products');
+    var cats = {};
+    products.forEach(function(p) { if (p.category) cats[p.category] = 1; });
+    var sel = document.getElementById('categoryFilter');
+    var cur = sel.value;
+    sel.innerHTML = '<option value="">All categories</option>';
+    Object.keys(cats).sort().forEach(function(c) {
+      sel.innerHTML += '<option value="' + c + '">' + c + '</option>';
+    });
+    sel.value = cur;
+  }
+
+  function loadProducts() {
+    var products = getData('products');
+    var search = (document.getElementById('productSearch').value || '').toLowerCase();
+    var cat = document.getElementById('categoryFilter').value;
+    var filtered = products.filter(function(p) {
+      if (search && p.name.toLowerCase().indexOf(search) === -1) return false;
+      if (cat && p.category !== cat) return false;
+      return true;
+    });
+    var result = paginate(filtered, 'products', 10);
+    document.getElementById('productCount').textContent = filtered.length + ' product' + (filtered.length !== 1 ? 's' : '');
+    renderGridView(result.items);
+    renderTableView(result.items);
+    renderPagination('productsPagination', 'products', result.totalPages, 'goToProductsPage');
+  }
+
+  function goToProductsPage(page) { setPage('products', page); loadProducts(); }
+
+  function renderGridView(products) {
+    var grid = document.getElementById('productGridView');
+    if (products.length === 0) {
+      grid.innerHTML = '<div class="empty-state"><i class="fa-solid fa-box-open"></i><h3>No products found</h3><p>Add your first product to get started.</p></div>';
+      return;
+    }
+    var cur = getCurrentUser();
+    var isViewer = cur && cur.role === 'viewer';
+    var webProducts = getData('webProducts', []);
+    grid.innerHTML = products.map(function(p) {
+      var stockLabel = 'In stock';
+      var stockClass = 'badge-ok';
+      if (p.stock <= 0) { stockLabel = 'Out of stock'; stockClass = 'badge-cancelled'; }
+      else if (p.stock <= 5) { stockLabel = 'Low stock'; stockClass = 'badge-low'; }
+      var isPublished = webProducts.some(function(wp) { return wp.adminProductId === p.id; });
+      var publishBadge = isPublished ? '<span class="badge badge-web"><i class="fa-solid fa-globe"></i> Live</span> ' : '';
+      var img = p.image || 'https://placehold.co/200x200/e2e8f0/94a3b8?text=No+Image';
+      var webBtn = isPublished
+        ? '<button class="btn btn-sm btn-web" onclick="openPublishModal(\'' + p.id + '\')"><i class="fa-solid fa-pen"></i> Edit Web</button><button class="btn btn-sm btn-danger" onclick="unpublishFromWeb(\'' + p.id + '\')" title="Remove from website"><i class="fa-solid fa-globe-slash"></i></button>'
+        : '<button class="btn btn-sm btn-web" onclick="openPublishModal(\'' + p.id + '\')"><i class="fa-solid fa-globe"></i> Add to Web</button>';
+      var actions = isViewer ? '' : '<div class="pcard-actions">' + webBtn + '<button class="btn btn-sm" onclick="editProduct(\'' + p.id + '\')"><i class="fa-solid fa-pen"></i> Edit</button>' + (canDelete() ? '<button class="btn btn-sm btn-danger" onclick="deleteProduct(\'' + p.id + '\')"><i class="fa-solid fa-trash"></i></button>' : '') + '</div>';
+      return '<div class="product-card-admin"><div class="pcard-img"><img src="' + img + '" alt="' + p.name + '" onerror="this.src=\'https://placehold.co/200x200/e2e8f0/94a3b8?text=No+Image\'"></div><div class="pcard-body"><h4>' + p.name + '</h4><div class="pcard-price">' + formatCurrency(p.price) + '</div><div class="pcard-stock">' + publishBadge + '<span class="badge ' + stockClass + '">' + stockLabel + '</span> &middot; ' + (p.category || 'Uncategorized') + '</div></div>' + actions + '</div>';
+    }).join('');
+  }
+
+  function renderTableView(products) {
+    var tbody = document.getElementById('productTableBody');
+    if (products.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="text-center text-muted" style="padding:24px;">No products found</td></tr>';
+      return;
+    }
+    var cur = getCurrentUser();
+    var isViewer = cur && cur.role === 'viewer';
+    tbody.innerHTML = products.map(function(p) {
+      var stockLabel = 'OK';
+      var stockClass = 'badge-ok';
+      if (p.stock <= 0) { stockLabel = 'Out'; stockClass = 'badge-cancelled'; }
+      else if (p.stock <= 5) { stockLabel = 'Low'; stockClass = 'badge-low'; }
+      var img = p.image || 'https://placehold.co/40x40/e2e8f0/94a3b8?text=N';
+      var isPublishedTable = webProducts.some(function(wp) { return wp.adminProductId === p.id; });
+      var webBtnTable = isPublishedTable
+        ? '<button class="btn btn-sm btn-web" onclick="openPublishModal(\'' + p.id + '\')" title="Edit web listing"><i class="fa-solid fa-pen"></i></button> <button class="btn btn-sm btn-danger" onclick="unpublishFromWeb(\'' + p.id + '\')" title="Remove from web"><i class="fa-solid fa-globe-slash"></i></button>'
+        : '<button class="btn btn-sm btn-web" onclick="openPublishModal(\'' + p.id + '\')" title="Publish to web"><i class="fa-solid fa-globe"></i></button>';
+      var actions = isViewer ? '' : webBtnTable + ' <button class="btn btn-sm" onclick="editProduct(\'' + p.id + '\')"><i class="fa-solid fa-pen"></i></button> ' + (canDelete() ? '<button class="btn btn-sm btn-danger" onclick="deleteProduct(\'' + p.id + '\')"><i class="fa-solid fa-trash"></i></button>' : '');
+      return '<tr><td><div class="product-cell"><img src="' + img + '" alt="" onerror="this.src=\'https://placehold.co/40x40/e2e8f0/94a3b8?text=N\'"></div></td><td><strong>' + p.name + '</strong></td><td>' + p.sku + '</td><td>' + (p.category || '-') + '</td><td>' + formatCurrency(p.price) + '</td><td>' + p.stock + '</td><td><span class="badge ' + stockClass + '">' + stockLabel + '</span></td><td>' + actions + '</td></tr>';
+    }).join('');
+  }
+
+  function saveProduct() {
+    var id = document.getElementById('editProductId').value;
+    var name = document.getElementById('prodName').value.trim();
+    var price = parseFloat(document.getElementById('prodPrice').value) || 0;
+    var origPrice = parseFloat(document.getElementById('prodOrigPrice').value) || 0;
+    var category = document.getElementById('prodCategory').value;
+    var stock = parseInt(document.getElementById('prodStock').value) || 0;
+    var image = document.getElementById('prodImage').value.trim();
+    var sku = document.getElementById('prodSku').value.trim();
+
+    if (!name) { showToast('Product name is required', 'error'); return; }
+    if (price <= 0) { showToast('Price must be greater than 0', 'error'); return; }
+
+    var cur = getCurrentUser();
+    var products = getData('products');
+    if (id) {
+      var idx = products.findIndex(function(p) { return p.id === id; });
+      if (idx !== -1) {
+        products[idx].name = name;
+        products[idx].price = price;
+        products[idx].originalPrice = origPrice;
+        products[idx].category = category;
+        products[idx].stock = stock;
+        products[idx].image = image;
+        products[idx].sku = sku;
+      }
+      logActivity('product_updated', 'Product "' + name + '" (' + id + ') updated');
+      showToast('Product updated', 'success');
+    } else {
+      products.push({ id: 'PROD' + Date.now().toString(36).toUpperCase(), name: name, price: price, originalPrice: origPrice, category: category, stock: stock, image: image, sku: sku || generateSku(), createdAt: new Date().toISOString(), createdBy: cur ? cur.name : 'Unknown' });
+      logActivity('product_created', 'Product "' + name + '" created');
+      showToast('Product added', 'success');
+    }
+    setData('products', products);
+    closeModal('addProductModal');
+    loadCategoryFilter();
+    loadProducts();
+  }
+
+  function editProduct(id) {
+    var products = getData('products');
+    var p = products.find(function(x) { return x.id === id; });
+    if (!p) return;
+    document.getElementById('productModalTitle').textContent = 'Edit product';
+    document.getElementById('editProductId').value = p.id;
+    document.getElementById('prodName').value = p.name || '';
+    document.getElementById('prodPrice').value = p.price || '';
+    document.getElementById('prodOrigPrice').value = p.originalPrice || '';
+    document.getElementById('prodCategory').value = p.category || '';
+    document.getElementById('prodStock').value = p.stock || '';
+    document.getElementById('prodImage').value = p.image || '';
+    document.getElementById('prodSku').value = p.sku || '';
+    switchImageTab('url');
+    if (p.image) { previewImageUrl(p.image); }
+    openModal('addProductModal');
+  }
+
+  function resetProductForm() {
+    document.getElementById('productModalTitle').textContent = 'Add product';
+    document.getElementById('editProductId').value = '';
+    document.getElementById('prodName').value = '';
+    document.getElementById('prodPrice').value = '';
+    document.getElementById('prodOrigPrice').value = '';
+    document.getElementById('prodCategory').value = '';
+    document.getElementById('prodStock').value = '';
+    document.getElementById('prodImage').value = '';
+    document.getElementById('prodSku').value = generateSku();
+    removeImagePreview();
+    switchImageTab('url');
+  }
+
+  document.addEventListener('click', function(e) {
+    if (e.target.classList.contains('modal-overlay')) { closeAllModals(); }
+  });
+
+  var origOpenModal = window.openModal;
+  window.openModal = function(id) {
+    if (id === 'addProductModal') resetProductForm();
+    origOpenModal(id);
+  };
+
+  function deleteProduct(id) {
+    if (!canDelete()) { showToast('Access denied', 'error'); return; }
+    var products = getData('products');
+    var p = products.find(function(x) { return x.id === id; });
+    if (!p) return;
+    document.getElementById('deleteProdId').value = id;
+    document.getElementById('deleteProdName').textContent = p.name;
+    openModal('deleteProductModal');
+  }
+
+  function confirmDeleteProduct() {
+    if (!canDelete()) { showToast('Access denied', 'error'); return; }
+    var id = document.getElementById('deleteProdId').value;
+    var products = getData('products');
+    var p = products.find(function(x) { return x.id === id; });
+    var idx = products.findIndex(function(p) { return p.id === id; });
+    if (idx !== -1) products.splice(idx, 1);
+    setData('products', products);
+    if (p) logActivity('product_deleted', 'Product "' + p.name + '" (' + id + ') deleted');
+    closeModal('deleteProductModal');
+    showToast('Product deleted', 'success');
+    loadCategoryFilter();
+    loadProducts();
+  }
+
+  // ---- PUBLISH TO WEB ----
+  function openPublishModal(adminProductId) {
+    var products = getData('products');
+    var p = products.find(function(x) { return x.id === adminProductId; });
+    if (!p) return;
+
+    document.getElementById('webProductId').value = adminProductId;
+    document.getElementById('webProdName').value = p.name || '';
+    document.getElementById('webProdPrice').value = p.price || '';
+    document.getElementById('webProdOrigPrice').value = p.originalPrice || '';
+    document.getElementById('webProdTagline').value = '';
+    document.getElementById('webProdDesc').value = '';
+    document.getElementById('webProdBenefits').value = '';
+    document.getElementById('webProdRating').value = '';
+    document.getElementById('webProdReviews').value = '';
+    document.getElementById('webProdActive').checked = true;
+    document.getElementById('webProdExistingId').value = '';
+
+    // Reset category dropdown
+    var catSel = document.getElementById('webProdCategory');
+    catSel.value = '';
+    document.getElementById('webProdCustomCatGroup').style.display = 'none';
+    document.getElementById('webProdCustomCat').value = '';
+
+    var webProducts = getData('webProducts', []);
+    var existing = webProducts.find(function(x) { return x.adminProductId === adminProductId; });
+    if (existing) {
+      document.getElementById('webProdExistingId').value = existing.id || '';
+      document.getElementById('webProdTagline').value = existing.tagline || '';
+      document.getElementById('webProdDesc').value = existing.description || '';
+      document.getElementById('webProdBenefits').value = (existing.benefits || []).join('\n');
+      document.getElementById('webProdRating').value = existing.rating || '';
+      document.getElementById('webProdReviews').value = existing.reviewCount || '';
+      document.getElementById('webProdActive').checked = existing.active !== false;
+
+      // Set category
+      var catVal = existing.category || '';
+      var catOptions = Array.from(catSel.options).map(function(o) { return o.value; });
+      if (catVal && catOptions.indexOf(catVal) !== -1) {
+        catSel.value = catVal;
+      } else if (catVal) {
+        catSel.value = 'custom';
+        document.getElementById('webProdCustomCatGroup').style.display = '';
+        document.getElementById('webProdCustomCat').value = catVal;
+      }
+
+      renderWebImages(existing.images || []);
+    } else {
+      // Pre-fill category from admin product
+      var adminCat = p.category || '';
+      var catOptions2 = Array.from(catSel.options).map(function(o) { return o.value; });
+      if (adminCat && catOptions2.indexOf(adminCat) !== -1) {
+        catSel.value = adminCat;
+      }
+      renderWebImages(p.image ? [p.image] : []);
+    }
+
+    openModal('publishToWebModal');
+  }
+
+  // Custom category toggle
+  document.getElementById('webProdCategory').addEventListener('change', function() {
+    var group = document.getElementById('webProdCustomCatGroup');
+    group.style.display = this.value === 'custom' ? '' : 'none';
+  });
+
+  function renderWebImages(images) {
+    var list = document.getElementById('webImageList');
+    list.innerHTML = '';
+    images.forEach(function(url) { addWebImageRow(url); });
+    if (images.length === 0) addWebImageRow('');
+  }
+
+  function addWebImageRow(url, uploading) {
+    var list = document.getElementById('webImageList');
+    var row = document.createElement('div');
+    row.className = 'web-image-row';
+    row.style.cssText = 'display:flex;gap:8px;align-items:center;margin-bottom:6px;';
+    var preview = url ? '<img src="' + url + '" style="width:40px;height:40px;object-fit:cover;border-radius:6px;flex-shrink:0;" onerror="this.style.display=\'none\'">' : '';
+    var statusIcon = uploading ? '<i class="fa-solid fa-spinner fa-spin" style="color:var(--accent);flex-shrink:0;"></i>' : '';
+    row.innerHTML = preview + '<input type="text" class="web-img-url" value="' + (url || '') + '" placeholder="https://example.com/image.jpg" style="flex:1;padding:6px 10px;border:1px solid var(--border);border-radius:var(--radius);font-size:13px;background:var(--card-bg);color:var(--text);" oninput="this.previousElementSibling && this.previousElementSibling.tagName===\'IMG\' && (this.previousElementSibling.src=this.value)">' + statusIcon + '<button type="button" class="btn btn-sm btn-danger" onclick="this.parentElement.remove()"><i class="fa-solid fa-xmark"></i></button>';
+    list.appendChild(row);
+    return row;
+  }
+
+  async function handleWebImageUpload(input) {
+    var file = input.files[0];
+    if (!file) return;
+    if (file.size > 5 * 1024 * 1024) { showToast('Max 5MB allowed', 'error'); return; }
+
+    var row = addWebImageRow('', true);
+    var mc = getMilesConfig();
+    if (!mc || !mc.url || !mc.token) {
+      // Fallback: use base64
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var urlInput = row.querySelector('.web-img-url');
+        if (urlInput) urlInput.value = e.target.result;
+        row.querySelector('.fa-spinner')?.remove();
+      };
+      reader.readAsDataURL(file);
+      input.value = '';
+      return;
+    }
+
+    var formData = new FormData();
+    formData.append('image', file);
+    try {
+      var token = mc.token || 'MilesToken@2026';
+      var uploadUrl = mc.url.replace('api.php', '') + 'api.php?action=upload&token=' + encodeURIComponent(token);
+      var resp = await fetch(uploadUrl, { method: 'POST', body: formData });
+      var data = await resp.json();
+      if (data.success && data.url) {
+        var fullUrl = mc.url.replace('api.php', '') + data.url;
+        var urlInput = row.querySelector('.web-img-url');
+        if (urlInput) urlInput.value = fullUrl;
+        var previewImg = row.querySelector('img');
+        if (previewImg) previewImg.src = fullUrl;
+        row.querySelector('.fa-spinner')?.remove();
+        showToast('Image uploaded!', 'success');
+      } else {
+        row.remove();
+        showToast('Upload failed: ' + (data.error || 'Unknown error'), 'error');
+      }
+    } catch(e) {
+      row.remove();
+      showToast('Upload failed: ' + e.message, 'error');
+    }
+    input.value = '';
+  }
+
+  async function publishToWeb() {
+    var adminId = document.getElementById('webProductId').value;
+    var existingId = document.getElementById('webProdExistingId').value;
+    var name = document.getElementById('webProdName').value.trim();
+    var price = parseFloat(document.getElementById('webProdPrice').value) || 0;
+    var origPrice = parseFloat(document.getElementById('webProdOrigPrice').value) || 0;
+    var tagline = document.getElementById('webProdTagline').value.trim();
+    var description = document.getElementById('webProdDesc').value.trim();
+    var benefitsText = document.getElementById('webProdBenefits').value.trim();
+    var benefits = benefitsText ? benefitsText.split('\n').filter(function(b) { return b.trim(); }) : [];
+    var rating = parseFloat(document.getElementById('webProdRating').value) || 0;
+    var reviewCount = parseInt(document.getElementById('webProdReviews').value) || 0;
+    var active = document.getElementById('webProdActive').checked;
+
+    // Category
+    var catSel = document.getElementById('webProdCategory');
+    var category = catSel.value === 'custom' ? document.getElementById('webProdCustomCat').value.trim() : catSel.value;
+
+    var images = [];
+    document.querySelectorAll('.web-img-url').forEach(function(input) {
+      if (input.value.trim()) images.push(input.value.trim());
+    });
+
+    if (!name) { showToast('Product name is required', 'error'); return; }
+    if (price <= 0) { showToast('Price must be greater than 0', 'error'); return; }
+    if (images.length === 0) { showToast('Add at least one image', 'error'); return; }
+    if (rating < 0 || rating > 5) { showToast('Rating must be between 0 and 5', 'error'); return; }
+
+    var slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '');
+
+    var webProduct = {
+      id: existingId || ('WP' + Date.now().toString(36).toUpperCase()),
+      adminProductId: adminId,
+      name: name,
+      slug: slug,
+      price: price,
+      originalPrice: origPrice,
+      category: category,
+      tagline: tagline,
+      description: description,
+      benefits: benefits,
+      images: images,
+      rating: rating || 4.8,
+      reviewCount: reviewCount || 0,
+      active: active,
+      publishedAt: new Date().toISOString()
+    };
+
+    var webProducts = getData('webProducts', []);
+    var idx = webProducts.findIndex(function(x) { return x.adminProductId === adminId; });
+    if (idx !== -1) {
+      webProducts[idx] = webProduct;
+    } else {
+      webProducts.push(webProduct);
+    }
+    setData('webProducts', webProducts);
+
+    var syncResult = await syncWebProductsToServer();
+    if (syncResult && syncResult.success) {
+      showToast('Product published to website!', 'success');
+    } else {
+      showToast('Saved locally. Server sync pending.', 'info');
+    }
+
+    closeModal('publishToWebModal');
+    loadProducts();
+  }
+
+  async function unpublishFromWeb(adminProductId) {
+    if (!confirm('Remove this product from the website?')) return;
+    var webProducts = getData('webProducts', []);
+    var wp = webProducts.find(function(x) { return x.adminProductId === adminProductId; });
+    if (!wp) { showToast('Product not published', 'error'); return; }
+
+    // Try server delete
+    var mc = getMilesConfig();
+    if (mc && mc.url && mc.token) {
+      try {
+        var delUrl = mc.url + '?action=deleteWebProduct&id=' + encodeURIComponent(wp.id) + '&token=' + encodeURIComponent(mc.token);
+        await fetch(delUrl);
+      } catch(e) {}
+    }
+
+    // Remove from localStorage
+    webProducts = webProducts.filter(function(x) { return x.adminProductId !== adminProductId; });
+    setData('webProducts', webProducts);
+    await syncWebProductsToServer();
+    showToast('Product removed from website', 'success');
+    loadProducts();
+  }
+
+  async function generateProductPages() {
+    var mc = getMilesConfig();
+    if (!mc || !mc.url || !mc.token) { showToast('Milesweb not configured', 'error'); return; }
+    showToast('Generating pages...', 'info');
+    try {
+      var url = mc.url.replace('api.php', '') + 'generate-pages.php?token=' + encodeURIComponent(mc.token);
+      var resp = await fetch(url, { method: 'GET' });
+      var data = await resp.json();
+      if (data.success) {
+        showToast(data.message || 'Pages generated!', 'success');
+      } else {
+        showToast('Error: ' + (data.error || 'Unknown'), 'error');
+      }
+    } catch(e) {
+      showToast('Failed: ' + e.message, 'error');
+    }
+  }
+  </script>
+</body>
+</html>

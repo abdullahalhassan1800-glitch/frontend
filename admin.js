@@ -48,3 +48,5 @@ if(document.getElementById(" addBtn\)){document.getElementById(ddBtn\).addEventL
 if(document.getElementById(" closeDrawerBtn\)){document.getElementById(\closeDrawerBtn\).addEventListener(\click\,closeDrawer);}
 if(document.getElementById(\cancelBtn\)){document.getElementById(\cancelBtn\).addEventListener(\click\,closeDrawer);}
 if(document.getElementById(\saveBtn\)){document.getElementById(\saveBtn\).addEventListener(\click\,saveProduct);}
+
+if(document.getElementById(" resetBtn\)){document.getElementById(esetBtn\).addEventListener(\click\,resetFilters);}
